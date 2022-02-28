@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import serverConfiguration from './config/config.js'
 
 function App() {
+  const [message, setMessage] = useState(0)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {message}
+      <button onClick={
+          ()=>{
+              let url:string = serverConfiguration.serverIP
+              fetch(url+"/").then(
+                  (value)=>{
+                      console.log(value)
+                      return value.json()
+                  }).
+              then(
+                  (data)=>{
+                      setMessage(data)
+                  }
+              )
+          }
+      }>
+        Click to generate random number
+      </button>
     </div>
   );
 }
