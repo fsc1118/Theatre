@@ -1,16 +1,16 @@
-#Signin {
+#Signup {
     position: absolute;
     background-color: white;
     z-index: 1001;
     border-radius: 10px;
     top:100px;
-    left: 13vw;
-    width: calc(100vw - 13vw - 13vw);
+    left: 25vw;
+    width: calc(100vw - 25vw - 25vw);
     padding: 30px;
 }
 
-#SigninLogo {
-    background-image: url("../../../Image/Picture2.png");
+#SignupLogo {
+    background-image: url("../../../image/Picture2.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -20,4 +20,11 @@
     align-content: center;
     font-size: xx-large;
     color: cadetblue;
+}
+
+@media (max-width: 800px) {
+    #Signup {
+        left: 10vw;
+        width: calc(100vw - 20vw);
+    }
 }

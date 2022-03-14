@@ -1,3 +1,31 @@
-.login {
+#Login {
+  position: fixed;
   background-color: white;
+  z-index: 1001;
+  border-radius: 10px;
+  top:100px;
+  left: 30vw;
+  width: 40vw;
+  padding: 30px;
+  align-items: center;
+}
+
+#LoginLogo {
+  background-image: url("../../../image/Picture2.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  font-size: xx-large;
+  color: cadetblue;
+}
+
+@media (max-width: 800px) {
+  #Login {
+    left: 10vw;
+    width: calc(100vw - 20vw);
+  }
 }

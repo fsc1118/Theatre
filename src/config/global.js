@@ -1,5 +1,15 @@
+/**
+ *
+ * @author Shicheng
+ *
+ * Global variables and configurations
+ *
+ * */
+
+
+
 let AppConfig= {
-    serverIP:'http://127.0.0.1:8080'
+    serverIP:'http://127.0.0.1:8080/'
 }
 export let LOGIN = 0
 export let SIGNIN = 1
