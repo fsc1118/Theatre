@@ -20,8 +20,6 @@ export let Login = (props: any)=>{
     let password:string = ""
     let login = ()=>{
         LoginAPI(username, password).then((isSuccess)=>{
-            setCookie("username", username)
-            props.changePage(DEFAULT)
             if (isSuccess) {
                 setCookie("username", username)
                 props.changePage(DEFAULT)
