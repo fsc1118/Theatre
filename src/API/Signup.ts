@@ -1,4 +1,4 @@
-import {sendPostRequest} from "./Http_Utilities"
+import {sendPostRequest} from "../Util/Http_Utilities"
 
 
 /**

@@ -23,7 +23,7 @@
   color: cadetblue;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 820px) {
   #Login {
     left: 10vw;
     width: calc(100vw - 20vw);

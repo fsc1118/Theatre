@@ -1,9 +1,10 @@
-import {Button, Form, Row} from "react-bootstrap"
-import {LOGIN, SIGNIN} from "../../../config/global"
+import {Button, CloseButton, Form, Row} from "react-bootstrap"
+import {DEFAULT, LOGIN, SIGNIN} from "../../../config/global"
 import 'bootstrap/dist/css/bootstrap.css'
 import "./Login.css"
 import {LoginAPI} from "../../../API/Login"
 import React from "react"
+import {setCookie} from "../../../Util/Cookie_Utilities";
 
 /**
  *
@@ -19,9 +20,11 @@ export let Login = (props: any)=>{
     let password:string = ""
     let login = ()=>{
         LoginAPI(username, password).then((isSuccess)=>{
+            setCookie("username", username)
+            props.changePage(DEFAULT)
             if (isSuccess) {
-                alert("success")
-                //TODO
+                setCookie("username", username)
+                props.changePage(DEFAULT)
             } else {
                 alert("Username and password do not match")
             }
@@ -34,6 +37,9 @@ export let Login = (props: any)=>{
         login()
     }
     }>
+        <div style={{"float": "right"}}>
+            <CloseButton onClick={()=>{props.changePage(DEFAULT)}}/>
+        </div>
         <div id={"LoginLogo"}>
             Welcome Back!
         </div>

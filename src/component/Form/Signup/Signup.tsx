@@ -1,6 +1,6 @@
-import {Button, Col, Form, Row} from "react-bootstrap"
+import {Button, CloseButton, Col, Form, Row} from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.css'
-import {SIGNIN} from "../../../config/global"
+import {DEFAULT, SIGNIN} from "../../../config/global"
 import "./Signup.css"
 import {LOGIN} from "../../../config/global"
 import {FormEvent} from "react"
@@ -37,7 +37,7 @@ export let Signup =  (props: any)=>{
         }
         SignupAPI(name, password, email, city, phone, zip).then((isSuccessful)=>{
             if (isSuccessful) {
-                alert("Success")
+                props.changePage(LOGIN)
             } else {
                 alert("This username has been used")
             }
@@ -46,9 +46,12 @@ export let Signup =  (props: any)=>{
         })
     }
     return <Form id={"Signup"} onSubmit={(event)=>{submit(event)}}>
+        <div style={{"float": "right"}}>
+            <CloseButton onClick={()=>{props.changePage(DEFAULT)}}/>
+        </div>
         <div id={"SignupLogo"}>Welcome!</div>
         <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridEmail">
+            <Form.Group as={Col} controlId="formGridName">
                 <Form.Label>Name</Form.Label>
                 <Form.Control type="text" placeholder="Enter username:" required
                               onChange={(event)=>{name = event.target.value}}/>
@@ -65,7 +68,7 @@ export let Signup =  (props: any)=>{
                 <Form.Control type="password" placeholder="Password" required
                               onChange={(event)=>{password = event.target.value}}/>
             </Form.Group>
-            <Form.Group as={Col} controlId="formGridPassword">
+            <Form.Group as={Col} controlId="formGridRePassword">
                 <Form.Label>Confirm</Form.Label>
                 <Form.Control type="password" placeholder="Password" required
                               onChange={(event)=>{confirmedPassword = event.target.value}}/>
@@ -78,7 +81,7 @@ export let Signup =  (props: any)=>{
                 <Form.Control required onChange={(event)=>{city = event.target.value}}/>
             </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridCity">
+            <Form.Group as={Col} controlId="formGridPhone">
                 <Form.Label>Phone</Form.Label>
                 <Form.Control placeholder={"Example: 1234567890"} pattern="[0-9]{10}" required
                               onChange={(event)=>{phone = event.target.value}}/>
