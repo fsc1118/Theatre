@@ -1,30 +1,9 @@
-import React, {useState} from 'react';
-import serverConfiguration from './config/config.js'
-
-function App() {
-  const [message, setMessage] = useState(0)
+import {Main} from './component/main';
+export let App = ()=> {
   return (
     <div className="App">
-      {message}
-      <button onClick={
-          ()=>{
-              let url:string = serverConfiguration.serverIP
-              fetch(url+"/").then(
-                  (value)=>{
-                      console.log(value)
-                      return value.json()
-                  }).
-              then(
-                  (data)=>{
-                      setMessage(data)
-                  }
-              )
-          }
-      }>
-        Click to generate random number
-      </button>
+        <Main/>
     </div>
   );
 }
 
-export default App;

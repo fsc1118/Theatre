@@ -1,0 +1,23 @@
+#Signin {
+    position: absolute;
+    background-color: white;
+    z-index: 1001;
+    border-radius: 10px;
+    top:100px;
+    left: 13vw;
+    width: calc(100vw - 13vw - 13vw);
+    padding: 30px;
+}
+
+#SigninLogo {
+    background-image: url("../../../Image/Picture2.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: xx-large;
+    color: cadetblue;
+}
