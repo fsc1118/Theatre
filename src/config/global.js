@@ -9,7 +9,9 @@
 
 
 let AppConfig= {
-    serverIP:'http://127.0.0.1:8080/'
+    SERVER_IP: "http://127.0.0.1:8080/",
+    CONNECTION_RESET: 10,
+    NETWORK_ERROR_MESSAGE: ()=>{alert("Unexpected error occurred. Please try again")}
 }
 export let LOGIN = 0
 export let SIGNIN = 1

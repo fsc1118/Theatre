@@ -4,7 +4,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import "./Login.css"
 import {LoginAPI} from "../../../API/Login"
 import React from "react"
-import {setCookie} from "../../../Util/Cookie_Utilities";
+import {setCookie} from "../../../Util/Cookie_Utilities"
+import {withResend} from "../../../Util/Http_Utilities"
 
 /**
  *
@@ -19,16 +20,18 @@ export let Login = (props: any)=>{
     let username:string = ""
     let password:string = ""
     let login = ()=>{
-        LoginAPI(username, password).then((isSuccess)=>{
-            if (isSuccess) {
-                setCookie("username", username)
-                props.changePage(DEFAULT)
-            } else {
-                alert("Username and password do not match")
-            }
-        }).catch(()=>{
-            alert("Unexpected error occurred. Please try again")
-        })
+        withResend(
+                ()=>{
+                return LoginAPI(username, password)
+            },
+                (isSuccess: boolean)=>{
+                if (isSuccess) {
+                    setCookie("username", username)
+                    props.changePage(DEFAULT)
+                } else {
+                    alert("Username and password do not match")
+                }
+            })
     }
     return <Form id={"Login"} onSubmit={(event)=>{
         event.preventDefault()

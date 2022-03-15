@@ -9,7 +9,7 @@ import ServerConfig from "../config/global"
 export let sendPostRequest = (http_body: any, url: string):Promise<boolean>=>{
     return new Promise<boolean>(
         (resolve, reject)=>{
-            fetch(ServerConfig.serverIP + url, {
+            fetch(ServerConfig.SERVER_IP + url, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -30,4 +30,29 @@ export let sendPostRequest = (http_body: any, url: string):Promise<boolean>=>{
             })
         }
     )
+}
+
+
+/**
+ *
+ *
+ * Wrapper function to enable a callback to resend request upon network failure
+ *
+ * @author Shicheng Fang
+ *
+ * */
+export let withResend = (callAPI: ()=>Promise<boolean>,
+                         onNetworkOK:(isSuccess:boolean)=>void,
+                         onNetworkFailure:()=>void = ServerConfig.NETWORK_ERROR_MESSAGE,
+                         resend: number = ServerConfig.CONNECTION_RESET):void=>{
+    if (resend === 0) {
+        onNetworkFailure()
+        return
+    }
+    callAPI().then((isSuccess:boolean)=>{
+        onNetworkOK(isSuccess)
+        return
+    }).catch(()=>{
+        withResend(callAPI, onNetworkOK, onNetworkFailure, resend - 1)
+    })
 }

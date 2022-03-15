@@ -5,6 +5,7 @@ import "./Signup.css"
 import {LOGIN} from "../../../config/global"
 import {FormEvent} from "react"
 import {SignupAPI} from "../../../API/Signup"
+import {withResend} from "../../../Util/Http_Utilities";
 
 
 /**
@@ -25,7 +26,7 @@ export let Signup =  (props: any)=>{
     let phone:string = ""
     let zip:string = ""
 
-    let submit = (event: FormEvent)=>{
+    let submit = (event: FormEvent)=> {
         event.preventDefault()
         if (password !== confirmedPassword) {
             alert("Password do not match")
@@ -35,15 +36,17 @@ export let Signup =  (props: any)=>{
             alert("Password too short")
             return
         }
-        SignupAPI(name, password, email, city, phone, zip).then((isSuccessful)=>{
-            if (isSuccessful) {
-                props.changePage(LOGIN)
-            } else {
-                alert("This username has been used")
-            }
-        }).catch(()=>{
-            alert("Unexpected error occurred. Please try again")
-        })
+        withResend(
+            () => {
+                return SignupAPI(name, password, email, city, phone, zip)
+            },
+            (isSuccessful) => {
+                if (isSuccessful) {
+                    props.changePage(LOGIN)
+                } else {
+                    alert("This username has been used")
+                }
+            })
     }
     return <Form id={"Signup"} onSubmit={(event)=>{submit(event)}}>
         <div style={{"float": "right"}}>
@@ -97,7 +100,7 @@ export let Signup =  (props: any)=>{
             </Button>
         </Row>
         <br/>
-        <a href={""} onClick={(event)=>{
+        <a href={"#"} onClick={(event)=>{
             event.preventDefault()
             props.changePage(LOGIN)}
         }
