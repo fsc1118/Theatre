@@ -51,7 +51,6 @@ export let withResend = (callAPI: ()=>Promise<boolean>,
     }
     callAPI().then((isSuccess:boolean)=>{
         onNetworkOK(isSuccess)
-        return
     }).catch(()=>{
         withResend(callAPI, onNetworkOK, onNetworkFailure, resend - 1)
     })
