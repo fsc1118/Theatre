@@ -23,4 +23,8 @@ let setCookie = (cName: string, cValue: string, expDays:number = 365):void => {
 let getUsernameFromCookie = ():null|string => {
     return getCookie("username")
 }
-export {getCookie, setCookie, getUsernameFromCookie}
+
+let eraseCookie = (name:string) => {
+    document.cookie = name+'=; Max-Age=-99999999;'
+}
+export {getCookie, setCookie, getUsernameFromCookie, eraseCookie}

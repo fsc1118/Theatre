@@ -41,18 +41,17 @@ export let sendPostRequest = (http_body: any, url: string):Promise<boolean>=>{
  * @author Shicheng Fang
  *
  * */
-export let withResend = (callAPI: ()=>Promise<boolean>,
+export let sendRequestWithRetry = (callAPI: ()=>Promise<boolean>,
                          onNetworkOK:(isSuccess:boolean)=>void,
                          onNetworkFailure:()=>void = ServerConfig.NETWORK_ERROR_MESSAGE,
-                         resend: number = ServerConfig.CONNECTION_RESET):void=>{
-    if (resend === 0) {
+                         retry: number = ServerConfig.CONNECTION_RETRY):void=>{
+    if (retry === 0) {
         onNetworkFailure()
         return
     }
     callAPI().then((isSuccess:boolean)=>{
         onNetworkOK(isSuccess)
-        return
     }).catch(()=>{
-        withResend(callAPI, onNetworkOK, onNetworkFailure, resend - 1)
+        sendRequestWithRetry(callAPI, onNetworkOK, onNetworkFailure, retry - 1)
     })
 }

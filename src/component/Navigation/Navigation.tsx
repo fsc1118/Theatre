@@ -1,7 +1,7 @@
-import {Button, Container, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Dropdown, Nav, Navbar} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.css'
-import {SIGNIN} from "../../config/global"
-import {getUsernameFromCookie} from "../../Util/Cookie_Utilities";
+import {SIGNUP} from "../../config/global"
+import {eraseCookie, getUsernameFromCookie} from "../../Util/Cookie_Utilities";
 import {useEffect, useState} from "react";
 export let Navigation = (props: any)=>{
     const [isLogin, setIsLogin] = useState(getUsernameFromCookie() !== null)
@@ -25,10 +25,23 @@ export let Navigation = (props: any)=>{
                     </Nav>
                     {/* The button will only display when the user hasn't log in*/}
                     <Button style={{"display": isLogin ? "none":"block"}} variant="success" onClick={()=>{
-                        props.changePage(SIGNIN)
+                        props.changePage(SIGNUP)
                     }
                     }>Sign up</Button>
-                    <div style={{"display": isLogin ? "block":"none"}}>Hi! {getUsernameFromCookie()}</div>
+                    <Dropdown style={{"display": isLogin ? "block":"none"}}>
+                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                            Hi! {getUsernameFromCookie()}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={()=>{eraseCookie("username")}}>Log out</Dropdown.Item>
+                            <Dropdown.Item>Settings</Dropdown.Item>
+                            <Dropdown.Item>
+
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <div ></div>
                 </Navbar.Collapse>
 
             </Container>

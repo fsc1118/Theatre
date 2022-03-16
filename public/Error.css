@@ -1,0 +1,11 @@
+div:first-child {
+    display: flex;
+    justify-content: center;
+    font-size: 80px;
+    padding-top: 20vh;
+}
+
+div:nth-child(2) {
+    display: flex;
+    justify-content: center;
+}
