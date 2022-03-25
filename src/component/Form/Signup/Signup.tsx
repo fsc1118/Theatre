@@ -71,7 +71,7 @@ export let Signup =  (props: any)=>{
         <Row className="mb-3">
             <Form.Group as={Col} controlId="formGridName">
                 <Form.Label>Name</Form.Label>
-                <Form.Control ref={nameRef} type="text" placeholder="Enter username:" required/>
+                <Form.Control ref={nameRef} type="text" placeholder="Enter username" required/>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Email</Form.Label>
