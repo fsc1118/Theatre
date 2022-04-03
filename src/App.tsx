@@ -5,7 +5,6 @@ export let App = ()=> {
   return (
     <div className="App">
         <Main/>
-        <SeatPicker />
     </div>
   );
 }
