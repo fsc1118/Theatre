@@ -1,0 +1,50 @@
+.MovieDescriptionSidebar {
+    max-width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h4.MovieDescriptionSidebar-h4  {
+    margin-top: 15%;
+    max-width: 75%%;
+    text-align: center;
+}
+
+img.MovieDescriptionSidebar-img {
+    margin-top: 5%;
+    max-width: 50%;
+    max-height: 40%;
+}
+
+p.MovieDescriptionSidebar-p {
+    margin-top: 5%;
+    margin-bottom: 20%;
+    padding-right: 2%;
+    max-width: 75%;
+    overflow-y: scroll;
+    text-align: center;
+    font-size: 0.85rem;
+    word-wrap: break-word;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
