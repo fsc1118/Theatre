@@ -12,7 +12,7 @@ import {sendPostRequest} from "../Util/Http_Utilities"
  *  The resolved False value typically implies the given username has been used.
  * */
 
-export let  SignupAPI = (
+export let SignupAPI = (
     username: string,
     password: string,
     email: string,

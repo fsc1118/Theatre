@@ -60,8 +60,6 @@ export let Signup =  (props: any)=>{
         )
     }
 
-
-
     /* UI */
     return <Form id={"Signup"} onSubmit={(event)=>{onFormSubmit(event)}}>
         <div style={{"float": "right"}}>
