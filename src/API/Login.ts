@@ -7,7 +7,7 @@ import {sendPostRequest} from "../Util/Http_Utilities"
  *  The LoginAPI will send a HTTP Post Request and returns a Promise
  *  with the resolved Truth value signals the if login is successful.
  * */
-export let LoginAPI= (
+export let LoginAPI = (
     username: string, password: string
 ) :Promise<boolean>=>{
     return sendPostRequest({
