@@ -39,6 +39,7 @@ export let SeatPicker = (props: any) => {
 
     useEffect(() => {
         getSeats(1)
+        getAvailableSeats(1)
         const interval = setInterval(() => {
             getAvailableSeats(1)
         }, 2000)
@@ -52,8 +53,10 @@ export let SeatPicker = (props: any) => {
     function handleAddSeat(id: number, e: any) {
         if (id === selectedSeat) {
             setSelectedSeat(-1)
+            props.selectSeat(-1)
         } else {
             setSelectedSeat(id)
+            props.selectSeat(id)
         }
         console.log("hello " + id)
     }
@@ -84,8 +87,10 @@ export let SeatPicker = (props: any) => {
                                                             (e: any) => handleAddSeat(seats, e): undefined}
                                             className={"SeatPicker-Box"}
                                             style={ {
-                                                backgroundColor: !availableSeats.includes(seats)? "grey":
-                                                                 selectedSeat === seats? "cyan": undefined,
+                                                backgroundColor: !availableSeats.includes(seats)? "#8FBC8F":
+                                                                 selectedSeat === seats? "green": undefined,
+                                                color: (!availableSeats.includes(seats) ||
+                                                            selectedSeat === seats)? "white": undefined,
                                                 cursor: availableSeats.includes(seats)? "pointer": "default"
                                             } }>
                                             {j + 1}

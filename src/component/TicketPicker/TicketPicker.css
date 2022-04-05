@@ -13,8 +13,22 @@ div.Sidebar.col-md-5 {
     align-items: center;
     justify-content: center;
     border-right: solid #aaa;
-    /* border-color: black !important;
-    border-style: solid !important; */
+}
+
+div.TicketPicker-btn-container {
+    margin-top: 5%;
+    width: 100%;
+}
+
+div.TicketPicker-btn-container > button {
+    background-color: green;
+    border-color: green;
+}
+
+div.TicketPicker-btn-container > button:hover {
+    background-color: #90EE90;
+    color: black;
+    border-color: #006400;
 }
 
 div.Sidebar.col-md-5 h3, p {
