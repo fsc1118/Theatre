@@ -13,5 +13,5 @@ export let LoginAPI = (
     return sendPostRequest({
         "name" : username,
         "password": password
-    }, "login")
+    }, "api/user/login")
 }

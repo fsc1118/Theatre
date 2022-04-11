@@ -27,6 +27,6 @@ export let SignupAPI = (
         "city": city,
         "phone": phone,
         "zip": zip
-    }, "signup")
+    }, "api/user/signup")
 
 }
