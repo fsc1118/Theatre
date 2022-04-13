@@ -9,7 +9,7 @@
 
 
 let AppConfig= {
-    SERVER_IP: "https://localhost:8080/",
+    SERVER_IP: "http://localhost:8080/",
     CONNECTION_RETRY: 5,
     NETWORK_ERROR_MESSAGE: ()=>{
         window.location.replace("Error.html")
