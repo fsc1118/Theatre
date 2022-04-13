@@ -2,12 +2,12 @@
 
 ## Starting Development
 
-- Make sure `package.json` has `http:localhost:8000` as its `proxy` during development.
+- Make sure `package.json` has `http:localhost:8000` (DO NOT have final slash) as its `proxy` during development.
 - Make sure `src/config/global.js` has `http:localhost:8000/` (MUST remember final slash) as its `SERVER_IP`.
 
 ## Starting Deployment
 
-- Make sure `package.json` has `https://cs348-theatre.herokuapp.com` as its `proxy`.
+- Make sure `package.json` has `https://cs348-theatre.herokuapp.com` (DO NOT have final slash) as its `proxy`.
 - Make sure `src/config/global.js` has `https://cs348-theatre.herokuapp.com/` (MUST remember final slash) as its `SERVER_IP`.
 - Follow the steps listed under **Available Scripts** beside `npm run build`.
 
