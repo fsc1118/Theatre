@@ -5,6 +5,8 @@ import { SeatPicker } from "./SeatPicker/SeatPicker"
 import { RoomTimePicker } from "./RoomTimePicker/RoomTimePicker"
 import { MovieDescriptionSidebar } from "./MovieDescriptionSidebar/MovieDescriptionSidebar"
 import React, { useState, useEffect } from "react"
+import {useParams} from "react-router-dom"
+import axios from 'axios'
 
 /**
  *
@@ -13,12 +15,18 @@ import React, { useState, useEffect } from "react"
  * The Ticket Selection Component. Allow user to select date and seats and submit request for movie ticket.
  * */
 export let TicketPicker = (props: any) => {
-    const [selectedSeat, setSelectedSeat] = useState(-1)
+    const movie_id = 1
+    const user_id = 1
+    // const {user_id} = useParams() - change to this after linking user with this
+    // const {movie_id} = useParams() - change to this after linking movie selector with this
+
+    const [selectedDatetime, setSelectedDatetime] = useState("")
     const [selectedRoom, setSelectedRoom] = useState(-1)
-    const [selectedDate, setSelectedDate] = useState("")
-    const [selectedTime, setSelectedTime] = useState("")
+    const [selectedSeat, setSelectedSeat] = useState(-1)
+
     const [hasSelectedRoomTime, setHasSelectedRoomTime] = useState(false)
     const [hasSelectedSeat, setHasSelectedSeat] = useState(false)
+    const [hasSubmitted, setHasSubmitted] = useState(false)
 
     function toggleHandleSelectSeat(seat_id: number) {
         if (hasSelectedSeat && seat_id === -1) {
@@ -31,17 +39,15 @@ export let TicketPicker = (props: any) => {
         }
     }
 
-    function toggleHandleSelectRoomTime(room_id: number, date: string, time: string) {
-        if (hasSelectedRoomTime && room_id == -1 && date == "" && time == "") {
+    function toggleHandleSelectRoomTime(room_id: number, datetime: string) {
+        if (hasSelectedRoomTime && room_id == -1 && datetime == "") {
             setHasSelectedRoomTime(false)
             setSelectedRoom(-1)
-            setSelectedDate("")
-            setSelectedTime("")
+            setSelectedDatetime("")
         } else {
             setHasSelectedRoomTime(true)
             setSelectedRoom(room_id)
-            setSelectedDate(date)
-            setSelectedTime(time)
+            setSelectedDatetime(datetime)
         }
     }
 
@@ -50,20 +56,58 @@ export let TicketPicker = (props: any) => {
         setHasSelectedSeat(false)
     }
 
-    function handleSubmit(room_id: number, date: string, time: string, seat_id: number, e: any) {
-        console.log("Room ID: " + room_id + "Date: " + date + "Time: " + time + "Seat: " + seat_id)
+    function handleSubmit(room_id: number, datetime: string, seat_id: number, e: any) {
+        console.log("Room ID: " + room_id + "DateTime: " + datetime + "Seat: " + seat_id)
+        const d = new Date(datetime)
+        let ye = new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'UTC' }).format(d);
+        let mo = new Intl.DateTimeFormat('en', { month: '2-digit', timeZone: 'UTC' }).format(d);
+        let da = new Intl.DateTimeFormat('en', { day: '2-digit', timeZone: 'UTC' }).format(d);
+        let hr = new Intl.DateTimeFormat('en', { hour: '2-digit', hour12: false, timeZone: 'UTC' }).format(d);
+        let min = new Intl.DateTimeFormat('en', { minute: '2-digit', timeZone: 'UTC' }).format(d);
+        let sec = new Intl.DateTimeFormat('en', { second: '2-digit', timeZone: 'UTC' }).format(d);
+        if (min.length == 1) {
+            min = "0" + min
+        }
+        if (sec.length == 1) {
+            sec = "0" + sec
+        }
+
+        const datetime_str = `${ye}-${mo}-${da} ${hr}:${min}:${sec}` // "yyyy-MM-dd HH:mm:ss"
+
+        if (!hasSubmitted) {
+            setHasSubmitted(true)
+        }
+        const request = {
+            "movie_id": `${movie_id}`,
+            "room_id": `${room_id}`,
+            "user_id": `${user_id}`,
+            "seat_num": `${seat_id}`,
+            "datetime": datetime_str
+        }
+//
+//         console.log(request)
+
+        axios.post('/api/ticket/buy', request)
+        .then(function (response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error)
+            setHasSubmitted(false)
+        })
+
     }
 
     useEffect(() => {
-        console.log(selectedRoom + " " + selectedDate + " " + selectedTime)
-    }, [selectedRoom, selectedDate, selectedTime])
+        console.log(selectedRoom + " " + selectedDatetime + " " + selectedSeat)
+    }, [selectedRoom, selectedDatetime, selectedSeat])
 
     return (
         <Container className="TicketPicker-container align-items-center">
             <Row className="TicketPicker-row align-items-center justify-content-center">
                 <Col md={5}
                     className="Sidebar">
-                    <MovieDescriptionSidebar />
+                    <MovieDescriptionSidebar selectedMovie={movie_id}/>
                 </Col>
 
                 <Col md={5}
@@ -71,14 +115,20 @@ export let TicketPicker = (props: any) => {
                     {!hasSelectedRoomTime &&
                     <>
                     <h4 className="RoomTimePicker-h4">Pick your Room and Time...</h4>
-                    <RoomTimePicker selectRoomTime={toggleHandleSelectRoomTime}/>
+                    <RoomTimePicker selectRoomTime={toggleHandleSelectRoomTime}
+                                    selectedMovie={movie_id}/>
                     </>
                     }
 
                     {hasSelectedRoomTime &&
                         <>
                             <h4 className="SeatPicker-h4">Pick your seat...</h4>
-                            <SeatPicker selectSeat={toggleHandleSelectSeat}/>
+                            <SeatPicker selectSeat={toggleHandleSelectSeat}
+                                        selectedMovie={movie_id}
+                                        selectedRoom={selectedRoom}
+                                        selectedDatetime={selectedDatetime}
+                                        submitted={hasSubmitted}
+                                        toggleSubmitted={setHasSubmitted} />
                         </>
                     }
 
@@ -98,8 +148,7 @@ export let TicketPicker = (props: any) => {
                              {hasSelectedSeat &&
                                 <Button className="Submit-btn"
                                     onClick={(e: any) => handleSubmit(selectedRoom,
-                                                                        selectedDate,
-                                                                        selectedTime,
+                                                                        selectedDatetime,
                                                                         selectedSeat,
                                                                         e)}
                                                                         style={ {
