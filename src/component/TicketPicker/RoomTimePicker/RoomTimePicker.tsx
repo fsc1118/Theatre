@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import {Table} from "react-bootstrap"
 import "./RoomTimePicker.css"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 /**
  *
@@ -11,96 +11,64 @@ import React, { useState, useEffect } from "react"
  * for a movie.
  * */
 export let RoomTimePicker = (props: any) => {
-//     const [seats, setSeats] = useState<number []>([])
-//     const [availableSeats, setAvailableSeats] = useState<number []>([])
-//     const [selectedSeat, setSelectedSeat] = useState(-1)
-       const [selectedRoom, setSelectedRoom] = useState(-1)
-       const [selectedDate, setSelectedDate] = useState("")
-       const [selectedTime, setSelectedTime] = useState("")
 
-//     const getSeats = async(id: number) => {
-//         try {
-//             const response = await fetch(`/seats/all_seats_in_room_${id}`)
-//             const seat_data = await response.json()
-//             setSeats([...seat_data])
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     }
-//
-//     const getAvailableSeats = async(id: number) => {
-//         try{
-// //             const response = await fetch(`/seats/all_seats_in_room_${id}`) // change to this later
-// //             const avail_seat_data = await response.json()
-// //             const avail_seat_data = [...Array(10)].map(()=>{return Math.floor(Math.random() * 15)}); // remove this later
-//             const avail_seat_data = [1, 2, 5, 7, 8, 10, 11, 12, 13, 14]
-//             setAvailableSeats(avail_seat_data)
-//             console.log(availableSeats)
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     }
-//
-//     useEffect(() => {
-//         getSeats(1)
-//         const interval = setInterval(() => {
-//             getAvailableSeats(1)
-//         }, 2000)
-//         return() => clearInterval(interval)
-//     }, [])
+    interface RoomAndTime {
+        room_id: number;
+        show_datetime: string;
+    }
 
-//     console.log("hello world")
-//     console.log(seats)
-//     console.log(seats.length)
+    const movie_id = 1
+//     const movie_id = useParams()
 
-//     function handleAddSeat(id: number, e: any) {
-//         if (id === selectedSeat) {
-//             setSelectedSeat(-1)
-//         } else {
-//             setSelectedSeat(id)
-//         }
-//         console.log("hello " + id)
-//     }
+    const [roomsAndTimes, setRoomsAndTimes] = useState<RoomAndTime []>([])
+    const [availRoomsAndTimes, setAvailRoomsAndTimes] = useState<RoomAndTime []>([])
+    const [selectedRoom, setSelectedRoom] = useState(-1)
+    const [selectedDatetime, setSelectedDatetime] = useState("")
 
-//     const copy_seats = [...seats]
-//
-//     const newSeatArr:number[][] = []
-//     while (copy_seats.length) {
-//         newSeatArr.push(copy_seats.splice(0,5))
-//     }
+    const mountedRef = useRef(true)
 
-    function handleAddRoomTime(roomID: number, date: string, time: string, e: any) {
-        if (roomID == selectedRoom && date == selectedDate && time == selectedTime) {
+    function handleAddRoomTime(roomID: number, datetime: string, e: any) {
+        if (roomID == selectedRoom && datetime == selectedDatetime) {
             setSelectedRoom(-1)
-            setSelectedDate("")
-            setSelectedTime("")
-            props.selectRoomTime(-1, "", "")
+            setSelectedDatetime("")
+            props.selectRoomTime(-1, "")
         } else {
             setSelectedRoom(roomID)
-            setSelectedDate(date)
-            setSelectedTime(time)
-            props.selectRoomTime(roomID, date, time)
+            setSelectedDatetime(datetime)
+            props.selectRoomTime(roomID, datetime)
         }
     }
 
-    const roomsAndTimes = [
-        {room_id: 1, time: new Date('December 17, 1995 03:24:00')},
-        {room_id: 2, time: new Date('December 18, 1995 03:24:00')},
-        {room_id: 3, time: new Date('December 19, 1995 03:24:00')},
-        {room_id: 4, time: new Date('December 20, 1995 03:24:00')},
-        {room_id: 5, time: new Date('December 23, 1995 07:28:00')},
-        {room_id: 3, time: new Date('December 28, 1995 03:24:00')},
-        {room_id: 1, time: new Date('December 28, 1995 03:05:00')},
-        {room_id: 2, time: new Date('December 28, 1995 03:05:00')},
-        {room_id: 2, time: new Date('December 28, 1995 16:05:00')},
-        {room_id: 1, time: new Date('December 17, 1995 17:24:00')},
-        {room_id: 2, time: new Date('December 18, 1995 13:24:00')},
-        {room_id: 3, time: new Date('December 19, 1995 15:24:00')},
-        {room_id: 4, time: new Date('December 20, 1995 13:24:00')},
-        {room_id: 5, time: new Date('December 23, 1995 12:28:00')},
-        {room_id: 3, time: new Date('December 28, 1995 11:24:00')},
-        {room_id: 1, time: new Date('December 28, 1995 10:05:00')},
-    ]
+    const getRoomsAndTimes = async(movie_id: number) => {
+        try {
+            const response = await fetch(`/api/movieShowings/movie=${movie_id}`)
+            const showings_data = await response.json()
+            console.log("All Rooms And times: " + showings_data)
+            setRoomsAndTimes(showings_data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getAvailRoomsAndTimes = async(movie_id: number) => {
+        try {
+            const response = await fetch(`/api/movieShowings/avail/movie=${movie_id}`)
+            const showings_data = await response.json()
+            console.log("Avail Rooms And times: " + showings_data)
+            setAvailRoomsAndTimes(showings_data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+//     console.log(availRoomsAndTimes)
+
+    useEffect(() => {
+        getRoomsAndTimes(movie_id) // change movie id to props.movieId etc later
+        getAvailRoomsAndTimes(movie_id) // change movie id to props.movieId etc later
+        return () => { mountedRef.current = false }
+    }, [])
 
     return (
         <div className={"RoomTimePicker-container"}>
@@ -110,16 +78,32 @@ export let RoomTimePicker = (props: any) => {
                     return (
                         <li key= {index}
                             className={"RoomTimePicker-li"}
-                            onClick = {(e) => handleAddRoomTime(item.room_id,
-                                                                    item.time.toDateString(),
-                                                                    item.time.toTimeString(),
-                                                                    e)}
+                            onClick = {availRoomsAndTimes.find(element => element.room_id === item.room_id &&
+                                            element.show_datetime === item.show_datetime)?
+                                                (e) => handleAddRoomTime(item.room_id,
+                                                                    item.show_datetime.toString(),
+                                                                    e): undefined}
                             style = { {
-                                backgroundColor: (item.room_id == selectedRoom &&
-                                                    item.time.toDateString() == selectedDate &&
-                                                    item.time.toTimeString() == selectedTime)? "cyan": undefined
+                                backgroundColor: !availRoomsAndTimes.find(element => element.room_id === item.room_id &&
+                                                                                     element.show_datetime === item.show_datetime)?
+                                    "#8FBC8F":
+                                        (item.room_id == selectedRoom &&
+                                            item.show_datetime.toString() == selectedDatetime)? "cyan": undefined
                             } }>
-                            Room: {item.room_id}, Time: {item.time.toDateString()}
+                            {console.log(item)}
+                            {console.log(availRoomsAndTimes.includes(item, 0))}
+                            Room: {item.room_id},
+                            Time: { (new Date(item.show_datetime))
+                                        .toLocaleDateString('en-US',
+                                            { weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                timeZone: 'America/New_York',
+                                                timeZoneName: 'short' }) +
+                                      " " +
+                                      (new Date(item.show_datetime))
+                                        .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                         </li>
                     )
                 })}
