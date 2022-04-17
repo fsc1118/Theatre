@@ -16,22 +16,24 @@ export let SeatPicker = (props: any) => {
 
     const getSeats = async(id: number) => {
         try {
-            const response = await fetch(`/seats/all_seats_in_room_${id}`)
+            const response = await fetch(`/api/seats/${id}`)
             const seat_data = await response.json()
             setSeats([...seat_data])
         } catch (error) {
-            console.log(error)
+//             console.log(error)
         }
     }
 
-    const getAvailableSeats = async(id: number) => {
+    const getAvailableSeats = async(movie_id: number, room_id: number, showDatetime: string) => {
         try{
-//             const response = await fetch(`/seats/all_seats_in_room_${id}`) // change to this later
-//             const avail_seat_data = await response.json()
-//             const avail_seat_data = [...Array(10)].map(()=>{return Math.floor(Math.random() * 15)}); // remove this later
-            const avail_seat_data = [1, 2, 5, 7, 8, 10, 11, 12, 13, 14]
+            const api_url = '/api/seats/avail/' + `${movie_id}_${room_id}_` + encodeURI(showDatetime);
+//             console.log(api_url)
+            const response = await fetch(api_url) // change to this later
+
+            const avail_seat_data = await response.json()
+//             console.log("Avail seat data " + avail_seat_data)
             setAvailableSeats(avail_seat_data)
-            console.log(availableSeats)
+//             console.log(availableSeats)
         } catch (error) {
             console.log(error)
         }
@@ -39,16 +41,31 @@ export let SeatPicker = (props: any) => {
 
     useEffect(() => {
         getSeats(1)
-        getAvailableSeats(1)
-        const interval = setInterval(() => {
-            getAvailableSeats(1)
-        }, 2000)
-        return() => clearInterval(interval)
-    }, [])
 
-    console.log("hello world")
-    console.log(seats)
-    console.log(seats.length)
+        const d = new Date(props.selectedDatetime)
+        let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+        let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        let hr = new Intl.DateTimeFormat('en', { hour: '2-digit', hour12: false }).format(d);
+        let min = new Intl.DateTimeFormat('en', { minute: '2-digit' }).format(d);
+        let sec = new Intl.DateTimeFormat('en', { second: '2-digit' }).format(d);
+        if (min.length == 1) {
+            min = "0" + min
+        }
+        if (sec.length == 1) {
+            sec = "0" + sec
+        }
+
+        const datetime_str = `${ye}-${mo}-${da} ${hr}:${min}:${sec}` // "yyyy-MM-dd HH:mm:ss"
+//         console.log(`GoodbyeFrom SeatPicker: ${datetime_str}`);
+
+//         console.log("Datetime str: " + datetime_str)
+        getAvailableSeats(props.selectedMovie, props.selectedRoom, datetime_str)
+    }, [props.submitted])
+
+//     console.log("hello world")
+//     console.log(seats)
+//     console.log(seats.length)
 
     function handleAddSeat(id: number, e: any) {
         if (id === selectedSeat) {
@@ -58,7 +75,7 @@ export let SeatPicker = (props: any) => {
             setSelectedSeat(id)
             props.selectSeat(id)
         }
-        console.log("hello " + id)
+//         console.log("hello " + id)
     }
 
     const copy_seats = [...seats]
