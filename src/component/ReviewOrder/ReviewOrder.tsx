@@ -1,9 +1,55 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import {Col, Row, Button, Container} from "react-bootstrap";
 import "./ReviewOrder.css"
+import axios from 'axios'
+import React, { useState, useEffect } from "react"
 
 
 export let ReviewOrder = (props: any) => {
+
+    const user_id = 1
+    const movie_id = 1
+
+    const [price, setPrice] = useState(0.0)
+    const [runTime, setRunTime] = useState(0)
+    const [movieName, setMovieName] = useState("")
+    const [movieRating, setMovieRating] = useState("")
+
+    const getNecessaryTicketInfo = async(movie_id: number) => {
+        const ticket_info = `/api/movies/${movie_id}`
+        //         console.log(price_request)
+        try {
+            const response = await fetch(ticket_info)
+            const ticket_data = await response.json()
+//             setPrice(price_data)
+            console.log(ticket_data)
+        } catch (error) {
+            console.log("Error: ")
+            console.log(error)
+        }
+    }
+
+    function handleSubmit(movie_id: number, room_id: number, datetime: string, seat_id: number, e: any) {
+
+        const request = {
+            "movie_id": `${movie_id}`,
+            "room_id": `${room_id}`,
+            "user_id": `${user_id}`,
+            "seat_num": `${seat_id}`,
+            "datetime": datetime
+        }
+
+        axios.post('/api/ticket/buy', request)
+        .then(function (response: any) {
+            console.log(response)
+        })
+        .catch(function (error: any) {
+            console.log(error)
+
+        })
+    }
+
+
     return (
         <Container className="lineContainer">
         <h1>REVIEW YOUR ORDER</h1>
@@ -73,7 +119,7 @@ export let ReviewOrder = (props: any) => {
             <Col xs md="5">
                 <h4><b>Subtotal</b></h4>
             </Col>
-            <Col cd md="2">
+            <Col xs md="2">
                 <b>
                     <p style={{display: "inline"}}>$</p>
                     <p id = "reviewSubtotal" style={{display: "inline"}}>36.00</p>

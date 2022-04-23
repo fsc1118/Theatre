@@ -1,0 +1,12 @@
+#basic-navbar-nav > div.me-auto.navbar-nav > a {
+    padding: 20px;
+    text-decoration: none;
+    color: #aaa;
+    transition-property: color;
+    transition-duration: 1s;
+}
+
+#basic-navbar-nav > div.me-auto.navbar-nav > a:hover {
+    color: green;
+}
+

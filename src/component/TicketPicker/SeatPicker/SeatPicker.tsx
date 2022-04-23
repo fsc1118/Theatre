@@ -10,13 +10,14 @@ import React, { useState, useEffect } from "react"
  * The Seat Selection Component. Allow user to pick an available seat.
  * */
 export let SeatPicker = (props: any) => {
+
     const [seats, setSeats] = useState<number []>([])
     const [availableSeats, setAvailableSeats] = useState<number []>([])
     const [selectedSeat, setSelectedSeat] = useState(-1)
 
-    const getSeats = async(id: number) => {
+    const getSeats = async(room_id: number) => {
         try {
-            const response = await fetch(`/api/seats/${id}`)
+            const response = await fetch(`/api/seats/${room_id}`)
             const seat_data = await response.json()
             setSeats([...seat_data])
         } catch (error) {
@@ -25,8 +26,9 @@ export let SeatPicker = (props: any) => {
     }
 
     const getAvailableSeats = async(movie_id: number, room_id: number, showDatetime: string) => {
-        try{
-            const api_url = '/api/seats/avail/' + `${movie_id}_${room_id}_` + encodeURI(showDatetime);
+        try {
+//             console.log(`ShowDateTime in SeatPicker: ${showDatetime}`)
+            const api_url = '/api/seats/avail/movie=' + `${movie_id}_room=${room_id}_dt=` + encodeURI(showDatetime);
 //             console.log(api_url)
             const response = await fetch(api_url) // change to this later
 
@@ -40,7 +42,7 @@ export let SeatPicker = (props: any) => {
     }
 
     useEffect(() => {
-        getSeats(1)
+        getSeats(props.selectedRoom) // change this later
 
         const d = new Date(props.selectedDatetime)
         let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);

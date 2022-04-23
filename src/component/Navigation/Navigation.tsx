@@ -3,10 +3,14 @@ import 'bootstrap/dist/css/bootstrap.css'
 import {SIGNUP} from "../../config/global"
 import {eraseCookie, getUsernameFromCookie} from "../../Util/Cookie_Utilities";
 import {useEffect, useState} from "react";
-export let Navigation = (props: any)=>{
-    const [isLogin, setIsLogin] = useState(getUsernameFromCookie() !== null)
-    useEffect(()=>{
+import { Link } from 'react-router-dom'
 
+import './Navigation.css'
+
+export let Navigation = (props: any) => {
+    const [isLogin, setIsLogin] = useState(getUsernameFromCookie() !== null)
+
+    useEffect(()=>{
         let timer = setInterval(()=>{
             setIsLogin(getUsernameFromCookie() !== null)
         }, 1000)
@@ -14,14 +18,20 @@ export let Navigation = (props: any)=>{
             clearInterval(timer)
         }
     })
+
+//     <Nav.Link href="#home">Home</Nav.Link>
+//                             <Nav.Link href="#link">Movies</Nav.Link>
+
     return <Navbar bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="#home">Theatre</Navbar.Brand>
+                <Navbar.Brand href="/">Theatre</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#link">Movies</Nav.Link>
+                        <Link to = "/movies/showing">Home</Link>
+                        <Link to = "/movies/all">All Movies</Link>
+                        <Link to = "/findMovie">Find Movies</Link>
+                        <Link to = "/userSettings">My Settings</Link>
                     </Nav>
                     {/* The button will only display when the user hasn't log in*/}
                     <Button style={{"display": isLogin ? "none":"block"}} variant="success" onClick={()=>{
@@ -41,7 +51,7 @@ export let Navigation = (props: any)=>{
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                    <div ></div>
+                    <div></div>
                 </Navbar.Collapse>
 
             </Container>
