@@ -19,6 +19,7 @@ export let Login = (props: any)=>{
     const [errorText, setErrorText] = useState("")
     let usernameRef:React.RefObject<any> = React.createRef()
     let passwordRef:React.RefObject<any> = React.createRef()
+
     let onFormSubmit = (event: FormEvent)=>{
         event.preventDefault()
         let username:string = usernameRef.current.value
