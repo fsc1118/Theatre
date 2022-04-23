@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import { Image } from "react-bootstrap"
 import "./MovieDescriptionSidebar.css"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 /**
  *
@@ -10,12 +10,48 @@ import React, { useState, useEffect } from "react"
  * The Seat Selection Component. Allow user to pick an available seat.
  * */
 export let MovieDescriptionSidebar = (props: any) => {
-    const text = "Harry Potter's (Daniel Radcliffe) third year at Hogwarts starts off badly when he learns deranged killer Sirius Black (Gary Oldman) has escaped from Azkaban prison and is bent on murdering the teenage wizard. While Hermione's (Emma Watson) cat torments Ron's (Rupert Grint) sickly rat, causing a rift among the trio, a swarm of nasty Dementors is sent to protect the school from Black. A mysterious new teacher helps Harry learn to defend himself, but what is his secret tie to Sirius Black?"
+
+    const mountedRef = useRef(true)
+
+    type Movie = {
+        type?: string,
+        ratings?: string,
+        movie_name?: string,
+        production_date?: string,
+        movie_summary?: string,
+        image_url?: string,
+        movie_length_in_minutes?: number,
+        number_tickets_sold?: number,
+        total_earnings?: number
+    }
+
+    const [movie, setMovie] = useState<Movie>({})
+
+    const getMovieDetails = async(movie_id: number) => {
+        const movie_request = `/api/movies/${movie_id}`
+        try {
+            const response = await fetch(movie_request)
+            const movie_data = await response.json()
+            setMovie(movie_data)
+        } catch (error) {
+            console.log("Error: ")
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getMovieDetails(props.selectedMovie)
+        return () => { mountedRef.current = false }
+    }, [props.selectedMovie])
+
+//     console.log(movie)
+
     return (
+
         <div className="MovieDescriptionSidebar">
-            <h4 className="MovieDescriptionSidebar-h4">Harry Potter and the Prizoners of Azkaban</h4>
-            <Image className="MovieDescriptionSidebar-img" src="https://barcodeindex.s3.amazonaws.com/images/636276592538.jpg"/>
-            <p className="MovieDescriptionSidebar-p">{text}</p>
+            <h4 className="MovieDescriptionSidebar-h4">{movie.movie_name}</h4>
+            <Image className="MovieDescriptionSidebar-img" src={movie.image_url}/>
+            <p className="MovieDescriptionSidebar-p">{movie.movie_summary}</p>
         </div>
     )
 

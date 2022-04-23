@@ -17,9 +17,6 @@ export let RoomTimePicker = (props: any) => {
         show_datetime: string;
     }
 
-    const movie_id = 1
-//     const movie_id = useParams()
-
     const [roomsAndTimes, setRoomsAndTimes] = useState<RoomAndTime []>([])
     const [availRoomsAndTimes, setAvailRoomsAndTimes] = useState<RoomAndTime []>([])
     const [selectedRoom, setSelectedRoom] = useState(-1)
@@ -43,7 +40,7 @@ export let RoomTimePicker = (props: any) => {
         try {
             const response = await fetch(`/api/movieShowings/movie=${movie_id}`)
             const showings_data = await response.json()
-            console.log("All Rooms And times: " + showings_data)
+//             console.log("All Rooms And times: " + showings_data)
             setRoomsAndTimes(showings_data)
         } catch (error) {
             console.log(error)
@@ -54,21 +51,23 @@ export let RoomTimePicker = (props: any) => {
         try {
             const response = await fetch(`/api/movieShowings/avail/movie=${movie_id}`)
             const showings_data = await response.json()
-            console.log("Avail Rooms And times: " + showings_data)
+//             console.log("Avail Rooms And times: " + showings_data)
             setAvailRoomsAndTimes(showings_data)
-
         } catch (error) {
             console.log(error)
         }
     }
 
 //     console.log(availRoomsAndTimes)
+//
+// {console.log(item)}
+//                             {console.log(availRoomsAndTimes.includes(item, 0))}
 
     useEffect(() => {
-        getRoomsAndTimes(movie_id) // change movie id to props.movieId etc later
-        getAvailRoomsAndTimes(movie_id) // change movie id to props.movieId etc later
+        getRoomsAndTimes(props.selectedMovie) // change movie id to props.movieId etc later
+        getAvailRoomsAndTimes(props.selectedMovie) // change movie id to props.movieId etc later
         return () => { mountedRef.current = false }
-    }, [])
+    }, [props.selectedMovie])
 
     return (
         <div className={"RoomTimePicker-container"}>
@@ -90,8 +89,7 @@ export let RoomTimePicker = (props: any) => {
                                         (item.room_id == selectedRoom &&
                                             item.show_datetime.toString() == selectedDatetime)? "cyan": undefined
                             } }>
-                            {console.log(item)}
-                            {console.log(availRoomsAndTimes.includes(item, 0))}
+
                             Room: {item.room_id},
                             Time: { (new Date(item.show_datetime))
                                         .toLocaleDateString('en-US',

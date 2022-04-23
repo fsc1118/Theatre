@@ -4,7 +4,7 @@ import "./TicketPicker.css"
 import { SeatPicker } from "./SeatPicker/SeatPicker"
 import { RoomTimePicker } from "./RoomTimePicker/RoomTimePicker"
 import { MovieDescriptionSidebar } from "./MovieDescriptionSidebar/MovieDescriptionSidebar"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import axios from 'axios'
 
@@ -15,11 +15,15 @@ import axios from 'axios'
  * The Ticket Selection Component. Allow user to select date and seats and submit request for movie ticket.
  * */
 export let TicketPicker = (props: any) => {
-    const movie_id = 1
+    const { movieId } = useParams() as { movieId: string }
+    const movie_id = parseInt(movieId)
+
+    const navigate = useNavigate()
+
+    const mountedRef = useRef(true)
     const user_id = 1
-//     const navigate = useNavigate()
+
     // const {user_id} = useParams() - change to this after linking user with this
-    // const {movie_id} = useParams() - change to this after linking movie selector with this
 
     const [selectedDatetime, setSelectedDatetime] = useState("")
     const [selectedRoom, setSelectedRoom] = useState(-1)
@@ -73,36 +77,49 @@ export let TicketPicker = (props: any) => {
     }
 
     function handleSubmit(movie_id: number, room_id: number, datetime: string, seat_id: number, e: any) {
-        console.log("Room ID: " + room_id + "DateTime: " + datetime + "Seat: " + seat_id)
-        const d = new Date(datetime)
-        let ye = new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'UTC' }).format(d);
-        let mo = new Intl.DateTimeFormat('en', { month: '2-digit', timeZone: 'UTC' }).format(d);
-        let da = new Intl.DateTimeFormat('en', { day: '2-digit', timeZone: 'UTC' }).format(d);
-        let hr = new Intl.DateTimeFormat('en', { hour: '2-digit', hour12: false, timeZone: 'UTC' }).format(d);
-        let min = new Intl.DateTimeFormat('en', { minute: '2-digit', timeZone: 'UTC' }).format(d);
-        let sec = new Intl.DateTimeFormat('en', { second: '2-digit', timeZone: 'UTC' }).format(d);
-
-        if (min.length == 1) {
-            min = "0" + min
-        }
-        if (sec.length == 1) {
-            sec = "0" + sec
-        }
-
-        const datetime_str = `${ye}-${mo}-${da} ${hr}:${min}:${sec}` // "yyyy-MM-dd HH:mm:ss"
-
-        getPrice(movie_id, room_id, datetime_str)
+//         console.log("Room ID: " + room_id + "DateTime: " + datetime + "Seat: " + seat_id)
 
         if (!hasSubmitted) {
             setHasSubmitted(true)
         }
 //         console.log(`DatetimeString: ${datetime_str}`);
 
+        navigate('/reviewOrder', { state: {
+            user_id: user_id,
+            movie_id: movie_id,
+            room_id: selectedRoom,
+            datetime: datetime,
+            seat_id: selectedSeat,
+            price: price
+        }})
     }
 
     useEffect(() => {
-        console.log(selectedRoom + " " + selectedDatetime + " " + selectedSeat)
-    }, [selectedRoom, selectedDatetime, selectedSeat])
+//         console.log(selectedRoom + " " + selectedDatetime + " " + selectedSeat)
+
+        if (selectedDatetime.length > 0) {
+            const d = new Date(selectedDatetime)
+            let ye = new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'UTC' }).format(d);
+            let mo = new Intl.DateTimeFormat('en', { month: '2-digit', timeZone: 'UTC' }).format(d);
+            let da = new Intl.DateTimeFormat('en', { day: '2-digit', timeZone: 'UTC' }).format(d);
+            let hr = new Intl.DateTimeFormat('en', { hour: '2-digit', hour12: false, timeZone: 'UTC' }).format(d);
+            let min = new Intl.DateTimeFormat('en', { minute: '2-digit', timeZone: 'UTC' }).format(d);
+            let sec = new Intl.DateTimeFormat('en', { second: '2-digit', timeZone: 'UTC' }).format(d);
+
+            if (min.length == 1) {
+                min = "0" + min
+            }
+
+            if (sec.length == 1) {
+                sec = "0" + sec
+            }
+
+            const datetime_str = `${ye}-${mo}-${da} ${hr}:${min}:${sec}` // "yyyy-MM-dd HH:mm:ss"
+            setSelectedDatetime(datetime_str)
+            getPrice(movie_id, selectedRoom, datetime_str)
+        }
+        return () => { mountedRef.current = false }
+    }, [movieId, selectedRoom, selectedSeat])
 
     return (
         <Container className="TicketPicker-container align-items-center">

@@ -63,7 +63,7 @@ export let SeatPicker = (props: any) => {
 
 //         console.log("Datetime str: " + datetime_str)
         getAvailableSeats(props.selectedMovie, props.selectedRoom, datetime_str)
-    }, [props.submitted])
+    }, [props.submitted, props.selectedMovie])
 
 //     console.log("hello world")
 //     console.log(seats)
