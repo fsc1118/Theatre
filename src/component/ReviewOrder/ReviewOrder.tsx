@@ -2,27 +2,56 @@ import 'bootstrap/dist/css/bootstrap.css'
 import {Col, Row, Button, Container} from "react-bootstrap";
 import "./ReviewOrder.css"
 import axios from 'axios'
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
+import { useLocation } from "react-router-dom"
 
 
 export let ReviewOrder = (props: any) => {
 
-    const user_id = 1
-    const movie_id = 1
+    type TicketInfo = {
+        user_id?: number,
+        movie_id?: number,
+        room_id?: number,
+        datetime?: string,
+        seat_id?: number,
+        price?: number
+    }
+
+    type Movie = {
+        type?: string,
+        ratings?: string,
+        movie_name?: string,
+        production_date?: string,
+        movie_summary?: string,
+        image_url?: string,
+        movie_length_in_minutes?: number,
+        number_tickets_sold?: number,
+        total_earnings?: number
+   }
+
+   const { state } = useLocation() as { state: TicketInfo }
+
+   const [ticketInfo, setTicketInfo] = useState<TicketInfo>({})
+
+   const [movie, setMovie] = useState<Movie>({})
+
+    const user_id = 1 // replace with user details in ticket info
+    const movie_id = 1 // replace with movie details in ticket info
 
     const [price, setPrice] = useState(0.0)
     const [runTime, setRunTime] = useState(0)
     const [movieName, setMovieName] = useState("")
     const [movieRating, setMovieRating] = useState("")
 
-    const getNecessaryTicketInfo = async(movie_id: number) => {
-        const ticket_info = `/api/movies/${movie_id}`
+    const mountedRef = useRef(true)
+
+    const getMovieInfo = async(movie_id: number) => {
+        const movieInfo = `/api/movies/${movie_id}`
         //         console.log(price_request)
         try {
-            const response = await fetch(ticket_info)
-            const ticket_data = await response.json()
-//             setPrice(price_data)
-            console.log(ticket_data)
+            const response = await fetch(movieInfo)
+            const movieData = await response.json()
+            setMovie(movieData)
         } catch (error) {
             console.log("Error: ")
             console.log(error)
@@ -49,6 +78,15 @@ export let ReviewOrder = (props: any) => {
         })
     }
 
+    useEffect(() => {
+        setTicketInfo(state)
+        if (state.movie_id) {
+            getMovieInfo(state.movie_id)
+        }
+        return () => { mountedRef.current = false }
+    }, [state])
+
+    console.log(ticketInfo)
 
     return (
         <Container className="lineContainer">
@@ -166,7 +204,11 @@ export let ReviewOrder = (props: any) => {
 
         <Row className="justify-content-md-center">
             <Col md="auto">
-                <Button id="reviewOrderBackBtn" style={{backgroundColor: "#FFB511"}} onClick={(e: any) => {e.preventDefault()}}><b>Back</b></Button>
+                <Button id="reviewOrderBackBtn"
+                    style={{backgroundColor: "#FFB511"}}
+                    onClick={(e: any) => {e.preventDefault()}}>
+                    <b>Back</b>
+                </Button>
             </Col>
         </Row>
     </Container>
