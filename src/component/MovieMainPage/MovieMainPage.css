@@ -1,0 +1,13 @@
+.MovieMainPage{
+    width: 100vw;
+    height: 100vh;
+}
+
+.scrollable {
+    overflow-x: scroll;
+    white-space: nowrap;
+    margin: 20px;
+    text-align: justify;
+    padding: 20px;
+}
+
