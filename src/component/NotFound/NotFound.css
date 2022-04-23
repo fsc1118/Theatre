@@ -1,0 +1,23 @@
+.NotFound {
+    height: 80vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.NotFound h1 {
+    text-align: center;
+}
+
+.NotFound a {
+    text-decoration: none;
+    color: green;
+    font-size: 20px;
+    transition-property: font-weight;
+    transition-duration: 0.5s;
+}
+
+.NotFound a:hover {
+    font-weight: bold;
+}
