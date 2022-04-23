@@ -5,7 +5,8 @@ import {Login} from "./Form/Login/Login"
 import {DEFAULT, LOGIN, SIGNUP} from "../config/global"
 import {useState} from "react"
 import {MainContent} from "./MainContent/MainContent";
-export let Main = ()=>{
+
+export let Main = () => {
     const [formControl, setFormControl] = useState(DEFAULT)
     if (formControl === DEFAULT) {
         return <div>
