@@ -24,6 +24,7 @@ export let ShowingMovies = (props:any) => {
     const [ date1, setDate1 ] = useState("")
     const [ date2, setDate2 ] = useState("")
     const [ title, setTitle ] = useState("")
+    const [ buttonClicked, setButtonClicked ] = useState(false)
 
     const months = [ {index: 1, month: "January"},
                     {index: 2, month: "February"},
@@ -39,12 +40,22 @@ export let ShowingMovies = (props:any) => {
                     {index: 12, month: "December"} ];
 
     const handleChangeDate1 = (event: SelectChangeEvent) => {
-        setDate1(event.target.value as string);
+        setDate1(event.target.value as string)
     };
 
     const handleChangeDate2 = (event: SelectChangeEvent) => {
-        setDate2(event.target.value as string);
+        setDate2(event.target.value as string)
     };
+
+    const handleClick = (e: any) => {
+        if (date1.length == 0 && date2.length > 0) {
+            // get data from api where movie showings happen before month in date 2
+        } else if (date1.length > 0 && date2.length == 0) {
+            // get data from api where movie showings happen after month in date 1
+        } else if (date1.length != 0 && date2.length != 0) {
+            // get data from api where movie showings happen between the months in date 1 and date 2
+        }
+    }
 
     const Item = styled(Paper)(({ theme }) => ({
       backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -89,10 +100,14 @@ export let ShowingMovies = (props:any) => {
                         </Select>
                     </FormControl>
                     <FormControl variant="outlined" sx={{ m: 2, minWidth: 120 }}>
-                        <TextField id="outlined-basic" label="Title" variant="outlined" />
+                        <TextField id="outlined-basic"
+                                    label="Title"
+                                    variant="outlined"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}/>
                     </FormControl>
                     <FormControl variant="outlined" sx={{ m: 2, minWidth: 120 }}>
-                        <Button variant="outlined">Find</Button>
+                        <Button variant="outlined" onClick={(e) => handleClick(e)}>Filter</Button>
                     </FormControl>
                 </Box>
             </div>
@@ -112,9 +127,6 @@ export let ShowingMovies = (props:any) => {
                   ))}
                 </Grid>
             </Box>
-
-
-
         </Container>
     )
 
