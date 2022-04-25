@@ -1,0 +1,14 @@
+footer {
+    min-height: 15vh;
+    margin-top: 10vh;
+    display: flex;
+    justify-content: center;
+    padding: 5vh;
+    background-color: #198754;
+}
+
+footer p {
+    font-weight: bold;
+    color: #FFFAF0;
+    margin: 10px;
+}

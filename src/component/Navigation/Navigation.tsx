@@ -3,24 +3,27 @@ import 'bootstrap/dist/css/bootstrap.css'
 import {SIGNUP} from "../../config/global"
 import {eraseCookie, getUsernameFromCookie} from "../../Util/Cookie_Utilities";
 import {useEffect, useState} from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import './Navigation.css'
 
 export let Navigation = (props: any) => {
     const [isLogin, setIsLogin] = useState(getUsernameFromCookie() !== null)
+    const navigate = useNavigate()
 
     useEffect(()=>{
         let timer = setInterval(()=>{
             setIsLogin(getUsernameFromCookie() !== null)
-        }, 1000)
+        }, 500)
         return ()=> {
             clearInterval(timer)
         }
     })
 
-//     <Nav.Link href="#home">Home</Nav.Link>
-//                             <Nav.Link href="#link">Movies</Nav.Link>
+    const handleLogout = () => {
+        eraseCookie("username")
+        navigate('/')
+    }
 
     return <Navbar bg="light" expand="lg">
             <Container>
@@ -28,14 +31,15 @@ export let Navigation = (props: any) => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Link to = "/movies/showing">Home</Link>
+                        <Link to = "/">Home</Link>
                         <Link to = "/movies/all">All Movies</Link>
                         <Link to = "/findMovie">Find Movies</Link>
-                        <Link to = "/userSettings">My Settings</Link>
+                        <Link to = "/movies/showing">Showing Movies</Link>
+                        { isLogin? <Link to = "/userSettings">My Settings</Link> : undefined }
                     </Nav>
                     {/* The button will only display when the user hasn't log in*/}
                     <Button style={{"display": isLogin ? "none":"block"}} variant="success" onClick={()=>{
-                        props.changePage(SIGNUP)
+                        props.changePages(SIGNUP)
                     }
                     }>Sign up</Button>
                     <Dropdown style={{"display": isLogin ? "block":"none"}}>
@@ -44,11 +48,7 @@ export let Navigation = (props: any) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item onClick={()=>{eraseCookie("username")}}>Log out</Dropdown.Item>
-                            <Dropdown.Item>Settings</Dropdown.Item>
-                            <Dropdown.Item>
-
-                            </Dropdown.Item>
+                            <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                     <div></div>

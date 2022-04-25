@@ -1,0 +1,26 @@
+.ShowingMovies.container {
+    min-height: 90vh;
+    margin-top: 2%;
+}
+
+#root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a > div > img {
+    max-width: 100%;
+    margin-bottom: 10%;
+}
+
+#root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a {
+    text-decoration: none;
+}
+
+#root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a > div > p {
+    margin: 2%;
+}
+
+#root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a > div > p:nth-child(2) {
+    font-weight: bold;
+    color: black;
+}
+
+#root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a > div > p:nth-child(3) {
+    color: green;
+}

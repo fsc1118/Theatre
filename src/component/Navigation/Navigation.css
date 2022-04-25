@@ -2,11 +2,21 @@
     padding: 20px;
     text-decoration: none;
     color: #aaa;
-    transition-property: color;
-    transition-duration: 1s;
+    transition-property: color font-weight;
+    transition-duration: 0.5s;
+}
+
+#root > div > div:nth-child(1) > nav > div > a {
+    transition-property: font-weight;
+    transition-duration: 0.5s;
+}
+
+#root > div > div:nth-child(1) > nav > div > a:hover {
+    font-weight: bold;
 }
 
 #basic-navbar-nav > div.me-auto.navbar-nav > a:hover {
     color: green;
+    font-weight: bold;
 }
 

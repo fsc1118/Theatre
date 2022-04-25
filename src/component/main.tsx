@@ -8,6 +8,7 @@ import {MainContent} from "./MainContent/MainContent";
 
 export let Main = () => {
     const [formControl, setFormControl] = useState(DEFAULT)
+
     if (formControl === DEFAULT) {
         return <div>
             <Navigation changePage={setFormControl}/>
