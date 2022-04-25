@@ -35,8 +35,7 @@ export let ReviewOrder = (props: any) => {
 
    const [movie, setMovie] = useState<Movie>({})
 
-    const user_id = 1 // replace with user details in ticket info
-    const movie_id = 1 // replace with movie details in ticket info
+//     const movie_id = 1 // replace with movie details in ticket info
 
     const [price, setPrice] = useState(0.0)
     const [runTime, setRunTime] = useState(0)
@@ -58,24 +57,26 @@ export let ReviewOrder = (props: any) => {
         }
     }
 
-    function handleSubmit(movie_id: number, room_id: number, datetime: string, seat_id: number, e: any) {
+    function handleSubmit(e: any) {
 
         const request = {
-            "movie_id": `${movie_id}`,
-            "room_id": `${room_id}`,
-            "user_id": `${user_id}`,
-            "seat_num": `${seat_id}`,
-            "datetime": datetime
+            "movie_id": `${state.movie_id}`,
+            "room_id": `${state.room_id}`,
+            "user_id": `${state.user_id}`,
+            "seat_num": `${state.seat_id}`,
+            "datetime": state.datetime
         }
 
-        axios.post('/api/ticket/buy', request)
-        .then(function (response: any) {
-            console.log(response)
-        })
-        .catch(function (error: any) {
-            console.log(error)
+        console.log(request)
 
-        })
+//         axios.post('/api/ticket/buy', request)
+//         .then(function (response: any) {
+//             console.log(response)
+//         })
+//         .catch(function (error: any) {
+//             console.log(error)
+//
+//         })
     }
 
     useEffect(() => {
@@ -85,8 +86,6 @@ export let ReviewOrder = (props: any) => {
         }
         return () => { mountedRef.current = false }
     }, [state])
-
-    console.log(ticketInfo)
 
     return (
         <Container className="lineContainer">
@@ -192,7 +191,11 @@ export let ReviewOrder = (props: any) => {
         <Row className="justify-content-md-center">
             <Col xs md="5">
                 <h4><b>Payment Methods</b></h4>
-                <Button id="submitOrderBtn" style={{backgroundColor: "#000"}} onClick={(e: any) => {e.preventDefault()}}>Pay full amount</Button>
+                <Button id="submitOrderBtn"
+                    style={{backgroundColor: "#000"}}
+                    onClick={(e: any) => handleSubmit(e)}>
+                    Pay full amount
+                </Button>
             </Col>
             <Col xs md="2"></Col>
         </Row>

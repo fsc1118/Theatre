@@ -8,6 +8,8 @@ import React, { useState, useEffect, useRef } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import axios from 'axios'
 
+import { getUsernameFromCookie } from "../../Util/Cookie_Utilities";
+
 /**
  *
  * @author Min Lu
@@ -19,16 +21,16 @@ export let TicketPicker = (props: any) => {
     const movie_id = parseInt(movieId)
 
     const navigate = useNavigate()
-
     const mountedRef = useRef(true)
-    const user_id = 1
+    const username = getUsernameFromCookie()
 
     // const {user_id} = useParams() - change to this after linking user with this
 
     const [selectedDatetime, setSelectedDatetime] = useState("")
     const [selectedRoom, setSelectedRoom] = useState(-1)
     const [selectedSeat, setSelectedSeat] = useState(-1)
-    const [price, setPrice] = useState(0.0);
+    const [price, setPrice] = useState(0.0)
+    const [ userId, setUserId ] = useState(-1)
 
     const [hasSelectedRoomTime, setHasSelectedRoomTime] = useState(false)
     const [hasSelectedSeat, setHasSelectedSeat] = useState(false)
@@ -76,6 +78,18 @@ export let TicketPicker = (props: any) => {
         }
     }
 
+    const getUserId = async(username: string) => {
+        const userId_request = `/api/user/${username}`
+        try {
+            const response = await fetch(userId_request)
+            const user_id_dat = await response.json()
+            setUserId(user_id_dat)
+        } catch (error) {
+            console.log("Error: ")
+            console.log(error)
+        }
+    }
+
     function handleSubmit(movie_id: number, room_id: number, datetime: string, seat_id: number, e: any) {
 //         console.log("Room ID: " + room_id + "DateTime: " + datetime + "Seat: " + seat_id)
 
@@ -85,7 +99,7 @@ export let TicketPicker = (props: any) => {
 //         console.log(`DatetimeString: ${datetime_str}`);
 
         navigate('/reviewOrder', { state: {
-            user_id: user_id,
+            user_id: userId,
             movie_id: movie_id,
             room_id: selectedRoom,
             datetime: datetime,
@@ -117,6 +131,9 @@ export let TicketPicker = (props: any) => {
             const datetime_str = `${ye}-${mo}-${da} ${hr}:${min}:${sec}` // "yyyy-MM-dd HH:mm:ss"
             setSelectedDatetime(datetime_str)
             getPrice(movie_id, selectedRoom, datetime_str)
+            if (username) {
+                getUserId(username)
+            }
         }
         return () => { mountedRef.current = false }
     }, [movieId, selectedRoom, selectedSeat])
