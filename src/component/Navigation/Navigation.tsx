@@ -39,7 +39,7 @@ export let Navigation = (props: any) => {
                     </Nav>
                     {/* The button will only display when the user hasn't log in*/}
                     <Button style={{"display": isLogin ? "none":"block"}} variant="success" onClick={()=>{
-                        props.changePages(SIGNUP)
+                        props.changePage(SIGNUP)
                     }
                     }>Sign up</Button>
                     <Dropdown style={{"display": isLogin ? "block":"none"}}>
