@@ -35,6 +35,7 @@ export let Navigation = (props: any) => {
                         <Link to = "/movies/all">All Movies</Link>
                         <Link to = "/findMovie">Find Movies</Link>
                         <Link to = "/movies/showing">Showing Movies</Link>
+                        <Link to="/user">User</Link>
                         { isLogin? <Link to = "/userSettings">My Settings</Link> : undefined }
                     </Nav>
                     {/* The button will only display when the user hasn't log in*/}

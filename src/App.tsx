@@ -33,7 +33,8 @@ export let App = () => {
                 <Main />
                 <Routes>
                     <Route path='/' element = {<MovieMainPage />} />
-                    <Route path='/userSettings' element = {isLogin? <UserSettings /> : <Navigate to="/" />} />
+                    <Route path='/index.html' element = {<MovieMainPage />} />
+                    <Route path='/user' element={<UserSettings/>}/>
                     <Route path='/findMovie' element = {<FindMovie />} />
                     <Route path='/buyTicket/:movieId' element={isLogin? <TicketPicker /> : <Navigate to="/" />} />
                     <Route path='/reviewOrder' element={isLogin? <ReviewOrder /> : <Navigate to="/" />} />
