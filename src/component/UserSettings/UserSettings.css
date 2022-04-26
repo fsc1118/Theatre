@@ -1,0 +1,42 @@
+.profileName {
+    font-size: xxx-large;
+    margin-bottom: 1em;
+}
+
+.profileImg {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+}
+#edit {
+    height: 50px;
+    width: 100px;
+}
+
+#editForm {
+    margin-top: 3em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 550px
+}
+@media (max-width: 576px) {
+    .profileImg {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .profileName {
+        text-align: center;
+        font-size: xx-large;
+    }
+    #edit {
+        margin-top: 2em;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #editForm {
+        width: 90%;
+    }
+}
+
