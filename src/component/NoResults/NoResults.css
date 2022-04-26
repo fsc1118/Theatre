@@ -1,0 +1,9 @@
+#root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > h1 {
+}

@@ -18,13 +18,31 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 
 import './ShowingMovies.css'
 
+import { NoResults } from '../NoResults/NoResults'
+
 
 export let ShowingMovies = (props:any) => {
 
-    const [ date1, setDate1 ] = useState("")
-    const [ date2, setDate2 ] = useState("")
-    const [ title, setTitle ] = useState("")
+    interface FilteredMovieShowings {
+        type: string,
+        ratings: string,
+        room_id: number;
+        movie_id: number,
+        movie_name: string,
+        production_date: string,
+        movie_summary: string,
+        image_url: string,
+        movie_length_in_minutes: number,
+        show_datetime: string
+    }
+
+    const [ date1, setDate1 ] = useState("none")
+    const [ date2, setDate2 ] = useState("none")
+    const [ title, setTitle ] = useState("none")
     const [ buttonClicked, setButtonClicked ] = useState(false)
+    const [ resultsFound, setResultsFound ] = useState(true)
+
+    const [ movies, setMovies ] = useState<FilteredMovieShowings []>([])
 
     const months = [ {index: 1, month: "January"},
                     {index: 2, month: "February"},
@@ -47,15 +65,31 @@ export let ShowingMovies = (props:any) => {
         setDate2(event.target.value as string)
     };
 
-    const handleClick = (e: any) => {
-        if (date1.length == 0 && date2.length > 0) {
-            // get data from api where movie showings happen before month in date 2
-        } else if (date1.length > 0 && date2.length == 0) {
-            // get data from api where movie showings happen after month in date 1
-        } else if (date1.length != 0 && date2.length != 0) {
-            // get data from api where movie showings happen between the months in date 1 and date 2
+    const getMovieShowingsData = async(month1: string, month2: string, title: string) => {
+        const data_request = `/api/movieShowings/filter/date1=${month1}_date2=${month2}_title=${title}`
+        try {
+            const response = await fetch(data_request)
+            const data = await response.json()
+            setMovies(data)
+        } catch (error) {
+            console.log("Error: ")
+            console.log(error)
         }
     }
+
+    const handleClick = (e: any) => {
+        getMovieShowingsData(date1, date2, title)
+        setButtonClicked(true)
+    }
+
+    useEffect(() => {
+        getMovieShowingsData(date1, date2, title)
+        if (movies.length == 0) {
+            setResultsFound(false)
+        } else {
+            setResultsFound(true)
+        }
+    }, [buttonClicked, movies.length])
 
     const Item = styled(Paper)(({ theme }) => ({
       backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -113,19 +147,22 @@ export let ShowingMovies = (props:any) => {
             </div>
 
             <Box sx={{ flexGrow: 1 }}>
+            {resultsFound?
                 <Grid container spacing={{ xs: 4, md: 5 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                  {Array.from(Array(8)).map((_, index) => (
+                  {movies.map((item, index) => (
                     <Grid item xs={2} sm={3} md={3} key={index}>
-                        <Link to = '/buyTicket/1'>
+                        <Link to = {`/buyTicket/${item.movie_id}`}>
                             <Item>
-                                <img src="https://m.media-amazon.com/images/I/61aG6EicTIL._AC_SY741_.jpg"/>
-                                <p>Harry Potter and the Deathly Hallows</p>
-                                <p>Showing on: 2022/1/02 00:00:00</p>
+                                <img src={item.image_url}/>
+                                <p>{item.movie_name}</p>
+                                <p><b>Showing on:</b> {new Date(item.show_datetime).toString()}</p>
+                                <p><b>Room:</b> {item.room_id}</p>
                             </Item>
                         </Link>
                     </Grid>
                   ))}
-                </Grid>
+                </Grid> : <NoResults />
+            }
             </Box>
         </Container>
     )

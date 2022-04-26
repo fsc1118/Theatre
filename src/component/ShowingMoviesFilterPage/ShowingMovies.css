@@ -1,11 +1,11 @@
 .ShowingMovies.container {
-    min-height: 90vh;
+    min-height: 80vh;
     margin-top: 2%;
 }
 
 #root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a > div > img {
     max-width: 100%;
-    margin-bottom: 10%;
+    margin-bottom: 5%;
 }
 
 #root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a {
