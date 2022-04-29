@@ -15,7 +15,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { experimentalStyled as styled } from '@mui/material/styles';
 
-
 import './ShowingMovies.css'
 
 import { NoResults } from '../NoResults/NoResults'

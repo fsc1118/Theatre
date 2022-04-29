@@ -9,6 +9,7 @@ import { UserSettings } from './component/UserSettings/UserSettings'
 import { MovieMainPage } from './component/MovieMainPage/MovieMainPage'
 import { FindMovie } from './component/FindMovie/FindMovie'
 import { ShowingMovies } from './component/ShowingMoviesFilterPage/ShowingMovies'
+import { AllMovies } from './component/AllMovies/AllMovies'
 
 import { getUsernameFromCookie } from "./Util/Cookie_Utilities";
 
@@ -38,7 +39,7 @@ export let App = () => {
                     <Route path='/findMovie' element = {<FindMovie />} />
                     <Route path='/buyTicket/:movieId' element={isLogin? <TicketPicker /> : <Navigate to="/" />} />
                     <Route path='/reviewOrder' element={isLogin? <ReviewOrder /> : <Navigate to="/" />} />
-                    <Route path='/movies/all' element={<MovieMainPage />} />
+                    <Route path='/movies/all' element={<AllMovies />} />
                     <Route path='/movies/showing' element={<ShowingMovies />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>

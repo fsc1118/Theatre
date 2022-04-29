@@ -19,7 +19,7 @@ export let UserSettings = (props: any) => {
             window.location.replace("index.html")
         }, 2000)
         return <Container>
-            You haven't logged in. Redirect you back...
+            <h2>You haven't logged in. Redirect you back...</h2>
         </Container>
     }
     setTimeout(()=>{
