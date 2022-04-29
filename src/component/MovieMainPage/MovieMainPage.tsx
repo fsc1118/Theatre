@@ -1,33 +1,76 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import {Col, Row, Button, Container} from "react-bootstrap";
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import "./MovieMainPage.css"
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef, Component } from 'react'
 
 export let MovieMainPage = (props: any) => {
-    const child = {width: `300em`, height: `100%`}
+     const mountedRef = useRef(true)
+    const name = 'movies'
+    interface Movie {
+             type: string,
+             ratings: string,
+             room_id: number;
+             movie_id: number,
+             movie_name: string,
+             production_date: string,
+             movie_summary: string,
+             image_url: string,
+             movie_length_in_minutes: number,
+             show_datetime: string
+    }
+    const [ movies, setMovies ] = useState<Movie []>([])
+    const top15 = [ {index: 1, number: "1"},
+                               {index: 2, number: "2"},
+                               {index: 3, number: "3"},
+                               {index: 4, number: "4"},
+                               {index: 5, number: "5"},
+                               {index: 6, number: "6"},
+                               {index: 7, number: "7"},
+                               {index: 8, number: "8"},
+                               {index: 9, number: "9"},
+                               {index: 10, number: "10"},
+                               {index: 11, number: "11"},
+                               {index: 12, number: "12"},
+                                {index : 13, number: "13"},
+                                {index : 14, number: "14"},
+                                {index : 15, number: "15"}];
+    const getURL = async(name : string)=> {
+                 const movie_request = `/api/${name}`
+                 try {
+                     const response = await fetch(movie_request)
+                     const url_data = await response.json()
+                     setMovies(url_data)
+                 } catch (error) {
+                     console.log("Error: ")
+                     console.log(error)
+                 }
+      }
+
+
+    useEffect(() => {
+                getURL(name)
+                return () => { mountedRef.current = false }
+         })
+// <img src={item.image_url} width="250" height="350"/>
+/*
+<Link to = {`/buyTicket/1`}>
+                                <img src={item.image_url} width="250" height="350"/>
+                          </Link>*/
+
     return (
         <Container className="MovieMainPage">
         <h1>Trending Movie</h1>
         <div className="scrollable">
-            <a href="https://www.imdb.com/title/tt10872600/">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZhbU5pWXmpsBxgV6PFL-kAxVAihDFPueGh0n2HoUbWZdFp_AC" alt="Spiderman" width="200" height="300"/>
-            </a>
-            <a href="https://www.imdb.com/title/tt1877830/">
-                <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRTT0pPu6d_lj_oSW5UzqJN3VNOKgWzpmpOE28LQjZsNTZXTBs6" alt="Batman" width="200" height="300"/>
-            </a>
-            <a href="https://www.imdb.com/title/tt11252248/">
-                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQYfOlKIxkS4ULGULhHT7o7THm93GGoGMjAaQEjnlrzGElbX8Dp" alt="Dog" width="200" height="300"/>
-             </a>
-                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQr6EDRxGrFnVYchhTylyH1ej6INDVHoOXu1vLwLcnffs3ZYzno" alt="Uncharted" width="200" height="300"/>
-                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTTZ32XuJkHQKa7kRGnTzX78Q3WXyl6uZAlETx5WPcPdOLdqsgN" alt="jujutsu" width="200" height="300"/>
-                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRYjNGmW3jCTissanzvS0ZCicoJUXkPyL4dpDHkF2dn2G-XwgBa" alt="Sing2" width="200" height="300"/>
+                         {movies.map((item, index) => (
+                         <Link to = {`/buyTicket/${index+1}`}>
+                                     <img src={item.image_url} width="250" height="350"/>
+                          </Link>
+
+                         ))}
+
         </div>
 
-        <div className="scrollableTest">
-        This is for a test round. Click on each page. It will take you to the corresponding
-        IMDB page. Need to replace them with link to our own local movie description page later.
-        </div>
 
         </Container>
     )
