@@ -10,6 +10,7 @@ import { MovieMainPage } from './component/MovieMainPage/MovieMainPage'
 import { FindMovie } from './component/FindMovie/FindMovie'
 import { ShowingMovies } from './component/ShowingMoviesFilterPage/ShowingMovies'
 import { AllMovies } from './component/AllMovies/AllMovies'
+import { PastPurchases } from './component/PastPurchases/PastPurchases'
 
 import { getUsernameFromCookie } from "./Util/Cookie_Utilities";
 
@@ -36,6 +37,7 @@ export let App = () => {
                     <Route path='/' element = {<MovieMainPage />} />
                     <Route path='/index.html' element = {<MovieMainPage />} />
                     <Route path='/user' element={<UserSettings/>}/>
+                    <Route path='/past_purchases' element={<PastPurchases />} />
                     <Route path='/findMovie' element = {<FindMovie />} />
                     <Route path='/buyTicket/:movieId' element={isLogin? <TicketPicker /> : <Navigate to="/" />} />
                     <Route path='/reviewOrder' element={isLogin? <ReviewOrder /> : <Navigate to="/" />} />
