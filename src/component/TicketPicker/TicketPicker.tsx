@@ -130,13 +130,14 @@ export let TicketPicker = (props: any) => {
 
             const datetime_str = `${ye}-${mo}-${da} ${hr}:${min}:${sec}` // "yyyy-MM-dd HH:mm:ss"
             setSelectedDatetime(datetime_str)
+//             console.log("datetime_str: " + datetime_str)
             getPrice(movie_id, selectedRoom, datetime_str)
             if (username) {
                 getUserId(username)
             }
         }
         return () => { mountedRef.current = false }
-    }, [movieId, selectedRoom, selectedSeat])
+    }, [movieId])
 
     return (
         <Container className="TicketPicker-container align-items-center">
