@@ -137,7 +137,7 @@ export let TicketPicker = (props: any) => {
             }
         }
         return () => { mountedRef.current = false }
-    }, [movieId])
+    }, [movieId, selectedRoom])
 
     return (
         <Container className="TicketPicker-container align-items-center">
