@@ -103,6 +103,7 @@ export let TicketPicker = (props: any) => {
             movie_id: movie_id,
             room_id: selectedRoom,
             datetime: datetime,
+            datetimeFormated: new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' }).format(new Date(datetime)),
             seat_id: selectedSeat,
             price: price
         }})

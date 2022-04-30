@@ -3,16 +3,16 @@ import {Col, Row, Button, Container} from "react-bootstrap";
 import "./ReviewOrder.css"
 import axios from 'axios'
 import React, { useState, useEffect, useRef } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 export let ReviewOrder = (props: any) => {
-
     type TicketInfo = {
         user_id?: number,
         movie_id?: number,
         room_id?: number,
         datetime?: string,
+        datetimeFormated?: string,
         seat_id?: number,
         price?: number
     }
@@ -27,26 +27,19 @@ export let ReviewOrder = (props: any) => {
         movie_length_in_minutes?: number,
         number_tickets_sold?: number,
         total_earnings?: number
-   }
+    }
+ 
+    const { state } = useLocation() as { state: TicketInfo }
 
-   const { state } = useLocation() as { state: TicketInfo }
+    const [ticketInfo, setTicketInfo] = useState<TicketInfo>({})
 
-   const [ticketInfo, setTicketInfo] = useState<TicketInfo>({})
-
-   const [movie, setMovie] = useState<Movie>({})
-
-//     const movie_id = 1 // replace with movie details in ticket info
-
-    const [price, setPrice] = useState(0.0)
-    const [runTime, setRunTime] = useState(0)
-    const [movieName, setMovieName] = useState("")
-    const [movieRating, setMovieRating] = useState("")
+    const [movie, setMovie] = useState<Movie>({})
 
     const mountedRef = useRef(true)
 
     const getMovieInfo = async(movie_id: number) => {
         const movieInfo = `/api/movies/${movie_id}`
-        //         console.log(price_request)
+
         try {
             const response = await fetch(movieInfo)
             const movieData = await response.json()
@@ -58,7 +51,6 @@ export let ReviewOrder = (props: any) => {
     }
 
     function handleSubmit(e: any) {
-
         const request = {
             "movie_id": `${state.movie_id}`,
             "room_id": `${state.room_id}`,
@@ -67,159 +59,162 @@ export let ReviewOrder = (props: any) => {
             "datetime": state.datetime
         }
 
-        console.log(request)
-
-//         axios.post('/api/ticket/buy', request)
-//         .then(function (response: any) {
-//             console.log(response)
-//         })
-//         .catch(function (error: any) {
-//             console.log(error)
-//
-//         })
+         axios.post('/api/ticket/buy', request)
+         .then(function (response: any) {
+             console.log(response)         
+             navigate('/purchaseComplete', { state: {
+                movie_name: movie.movie_name!,
+                total_paid: Number.parseFloat((ticketInfo.price! * 0.07 + 1.5 + ticketInfo.price!).toString()).toFixed(2)
+            }})
+         })
+         .catch(function (error: any) {
+             console.log(error)
+         })
     }
 
+    
     useEffect(() => {
         setTicketInfo(state)
-
+        
         if (state.movie_id) {
             getMovieInfo(state.movie_id)
-        }
+        }      
+
         return () => { mountedRef.current = false }
     }, [state])
 
-    console.log(ticketInfo)
+    const rowLetters = ["A", "B", "C", "D", "E", "F"]
+    const navigate = useNavigate()
+
     return (
         <>
         { ticketInfo != {} ?
-            <Container className="lineContainer">
-                <h1>REVIEW YOUR ORDER</h1>
-                <br></br>
+        <Container className="lineContainer">
+        <h1>REVIEW YOUR ORDER</h1>
+        <br></br>
 
-                <u><h2 id = "movieName">MOVIE NAME</h2></u>
-                <br></br>
+        <u><h2 id = "movieName">{movie.movie_name}</h2></u>
+        <br></br>
+        
+        <Row className="justify-content-md-center">
+            <Col xs md="4">
+                <h5 style={{display: "inline"}}>SHOWTIME: </h5>
+                <p id="reviewShowtime" style={{display: "inline"}}>{ticketInfo.datetimeFormated}</p>
+            </Col>
+            <Col xs md="3">
+                <h5 style={{display: "inline"}}>RUNTIME: </h5>
+                <p id="reviewMovieRuntime" style={{display: "inline"}}>{movie.movie_length_in_minutes} minutes</p>
+            </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+            <Col xs md="4">
+                <h5 style={{display: "inline"}}>SEAT: </h5>
+                <p id="reviewSeats" style={{display: "inline"}}>{rowLetters[Math.floor(ticketInfo.seat_id!/6)]}{(ticketInfo.seat_id! % 5)!=0?ticketInfo.seat_id!%5:5}</p>
+            </Col>
+            <Col xs md="3">
+                <h5 style={{display: "inline"}}>RATING: </h5>
+                <p id="reviewSeats" style={{display: "inline"}}>{movie.ratings}</p>
+            </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+            <Col xs md="4">
+                <h5 style={{display: "inline"}}>ROOM: </h5>
+                <p id="reviewSeats" style={{display: "inline"}}>{ticketInfo.room_id}</p>
+            </Col>
+            <Col xs md="3"></Col>
+        </Row>
 
-                <Row className="justify-content-md-center">
-                    <Col xs md="4">
-                        <h5 style={{display: "inline"}}>SHOWTIME: </h5>
-                        <p id="reviewShowtime" style={{display: "inline"}}>Jan 11    6:30pm</p>
-                    </Col>
-                    <Col xs md="3">
-                        <h5 style={{display: "inline"}}>RUNTIME: </h5>
-                        <p id="reviewMovieRuntime" style={{display: "inline"}}>129 mins</p>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col xs md="4">
-                        <h5 style={{display: "inline"}}>SEATS: </h5>
-                        <p id="reviewSeats" style={{display: "inline"}}>A12, A13, A14</p>
-                    </Col>
-                    <Col xs md="3">
-                        <h5 style={{display: "inline"}}>RATING: </h5>
-                        <p id="reviewSeats" style={{display: "inline"}}>PG-13</p>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col xs md="4">
-                        <h5 style={{display: "inline"}}>ROOM: </h5>
-                        <p id="reviewSeats" style={{display: "inline"}}>14</p>
-                    </Col>
-                    <Col xs md="3"></Col>
-                </Row>
+        <br></br>
+        <Container className="lineContainer">
+            <hr></hr>
+        </Container>
 
-                <br></br>
-                <Container className="lineContainer">
-                    <hr></hr>
-                </Container>
+        <Row className="justify-content-md-center">
+            <Col xs md="5">
+                <h4><b>Order Summary</b></h4>
+            </Col>
+            <Col xs md="2"></Col>
+        </Row>
+        <Row className="justify-content-md-center">
+            <Col xs md="5">
+                <p style={{display: "inline"}}>Normal Ticket x1</p>
+            </Col>
+            <Col xs md="2">
+                <p style={{display: "inline"}}>$</p>
+                <p className = "reviewTicketPrice" style={{display: "inline"}}>{ticketInfo.price}</p>
+                <p style={{display: "inline"}}> x1</p>
+            </Col>
+        </Row>
 
-                <Row className="justify-content-md-center">
-                    <Col xs md="5">
-                        <h4><b>Order Summary</b></h4>
-                    </Col>
-                    <Col xs md="2"></Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col xs md="5">
-                        <p style={{display: "inline"}}>Normal Ticket x</p>
-                        <p id="reviewNumOfTickets" style={{display: "inline"}}>3</p>
-                    </Col>
-                    <Col xs md="2">
-                        <p style={{display: "inline"}}>$</p>
-                        <p className = "reviewTicketPrice" style={{display: "inline"}}>{ticketInfo.price}</p>
-                        <p style={{display: "inline"}}> x</p>
-                        <p id="reviewNumOfTickets" style={{display: "inline"}}>3</p>
-                    </Col>
-                </Row>
+        <br></br>
+        <Container className="lineContainer">
+            <hr></hr>
+        </Container>
 
-                <br></br>
-                <Container className="lineContainer">
-                    <hr></hr>
-                </Container>
+        <Row className="justify-content-md-center">
+            <Col xs md="5">
+                <h4><b>Subtotal</b></h4>
+            </Col>
+            <Col xs md="2">
+                <b>
+                    <p style={{display: "inline"}}>$</p>
+                    <p id = "reviewSubtotal" style={{display: "inline"}}>{ticketInfo.price}</p>
+                </b>
+            </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+            <Col xs md="5">
+                <p>Taxes and Fees</p>
+            </Col>
+            <Col xs md="2">
+                <p style={{display: "inline"}}>$</p>
+                <p id = "reviewTicketPrice" style={{display: "inline"}}>{Number.parseFloat((ticketInfo.price! * 0.07 + 1.5).toString()).toFixed(2)}</p>
+            </Col>
+        </Row>
+        <br></br>
+        <Row className="justify-content-md-center">
+            <Col xs md="5">
+                <h4 style={{display: "inline"}}><u><b>Total</b></u></h4>
+            </Col>
+            <Col xs md="2">
+                <p style={{display: "inline"}}>$</p>
+                <p id = "reviewTicketPrice" style={{display: "inline"}}>{Number.parseFloat((ticketInfo.price! * 0.07 + 1.5 + ticketInfo.price!).toString()).toFixed(2)}</p>
+            </Col>
+        </Row>
 
-                <Row className="justify-content-md-center">
-                    <Col xs md="5">
-                        <h4><b>Subtotal</b></h4>
-                    </Col>
-                    <Col xs md="2">
-                        <b>
-                            <p style={{display: "inline"}}>$</p>
-                            <p id = "reviewSubtotal" style={{display: "inline"}}>36.00</p>
-                        </b>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col xs md="5">
-                        <p>Taxes and Fees</p>
-                    </Col>
-                    <Col xs md="2">
-                        <p style={{display: "inline"}}>$</p>
-                        <p id = "reviewTicketPrice" style={{display: "inline"}}>3.78</p>
-                    </Col>
-                </Row>
-                <br></br>
-                <Row className="justify-content-md-center">
-                    <Col xs md="5">
-                        <h4 style={{display: "inline"}}><u><b>Total</b></u></h4>
-                    </Col>
-                    <Col xs md="2">
-                        <p style={{display: "inline"}}>$</p>
-                        <p id = "reviewTicketPrice" style={{display: "inline"}}>39.78</p>
-                    </Col>
-                </Row>
+        <br></br>
+        <Container className="lineContainer">
+            <hr></hr>
+        </Container>
 
-                <br></br>
-                <Container className="lineContainer">
-                    <hr></hr>
-                </Container>
+        <Row className="justify-content-md-center">
+            <Col xs md="5">
+                <h4><b>Payment Methods</b></h4>
+                <Button id="submitOrderBtn"
+                    style={{backgroundColor: "#000"}}
+                    onClick={(e: any) => handleSubmit(e)}>
+                    Pay full amount
+                </Button>
+            </Col>
+            <Col xs md="2"></Col>
+        </Row>
 
-                <Row className="justify-content-md-center">
-                    <Col xs md="5">
-                        <h4><b>Payment Methods</b></h4>
-                        <Button id="submitOrderBtn"
-                            style={{backgroundColor: "#000"}}
-                            onClick={(e: any) => handleSubmit(e)}>
-                            Pay full amount
-                        </Button>
-                    </Col>
-                    <Col xs md="2"></Col>
-                </Row>
+        <br></br>
+        <Container className="lineContainer">
+            <hr></hr>
+        </Container>
 
-                <br></br>
-                <Container className="lineContainer">
-                    <hr></hr>
-                </Container>
-
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <Button id="reviewOrderBackBtn"
-                            style={{backgroundColor: "#FFB511"}}
-                            onClick={(e: any) => {e.preventDefault()}}>
-                            <b>Back</b>
-                        </Button>
-                    </Col>
-                </Row>
-            </Container> :
-            undefined}
+        <Row className="justify-content-md-center">
+            <Col md="auto">
+                <Button id="reviewOrderBackBtn"
+                    style={{backgroundColor: "#FFB511"}}
+                    onClick={(e: any) => navigate(-1)}>
+                    <b>Back</b>
+                </Button>
+            </Col>
+        </Row>
+    </Container> :
+    undefined}
     </>
     )
 }
