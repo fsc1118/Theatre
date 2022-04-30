@@ -10,6 +10,7 @@ import { MovieMainPage } from './component/MovieMainPage/MovieMainPage'
 import { FindMovie } from './component/FindMovie/FindMovie'
 import { ShowingMovies } from './component/ShowingMoviesFilterPage/ShowingMovies'
 import { AllMovies } from './component/AllMovies/AllMovies'
+import { PurchaseComplete } from './component/PurchaseComplete/PurchaseComplete'
 import { PastPurchases } from './component/PastPurchases/PastPurchases'
 
 import { getUsernameFromCookie } from "./Util/Cookie_Utilities";
@@ -43,6 +44,7 @@ export let App = () => {
                     <Route path='/reviewOrder' element={isLogin? <ReviewOrder /> : <Navigate to="/" />} />
                     <Route path='/movies/all' element={<AllMovies />} />
                     <Route path='/movies/showing' element={<ShowingMovies />} />
+                    <Route path='/purchaseComplete' element={<PurchaseComplete />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
                 <footer><p>Copyright &copy; 2022 CS 348 Group 25</p></footer>
