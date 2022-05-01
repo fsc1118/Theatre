@@ -6,9 +6,9 @@ import ServerConfig from "../config/global"
 *  The sendPostRequest will send a HTTP Post Request and returns a Promise
 *  with the resolved Truth value signals the if operation of this request is successful
 * */
-export let sendPostRequest = (http_body: any, url: string):Promise<boolean>=>{
+export let sendPostRequest = (http_body: any, url: string): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve, reject)=>{
+        (resolve, reject) => {
             fetch(ServerConfig.SERVER_IP + url, {
                 method: "POST",
                 headers: {
@@ -17,15 +17,17 @@ export let sendPostRequest = (http_body: any, url: string):Promise<boolean>=>{
                 },
                 body: JSON.stringify(http_body)
             }).then(
-                (response)=>{
+                (response) => {
                     if (response.status !== 200) {
                         reject()
                     }
                     return response.json()
                 }
-            ).then((json)=>{
+            ).then((json) => {
                 resolve(json["success"])
-            }).catch(()=>{
+            }).catch((error) => {
+                debugger
+                console.log(error)
                 reject()
             })
         }
@@ -41,17 +43,17 @@ export let sendPostRequest = (http_body: any, url: string):Promise<boolean>=>{
  * @author Shicheng Fang
  *
  * */
-export let sendRequestWithRetry = (callAPI: ()=>Promise<boolean>,
-                         onNetworkOK:(isSuccess:boolean)=>void,
-                         onNetworkFailure:()=>void = ServerConfig.NETWORK_ERROR_MESSAGE,
-                         retry: number = ServerConfig.CONNECTION_RETRY):void=>{
+export let sendRequestWithRetry = (callAPI: () => Promise<boolean>,
+    onNetworkOK: (isSuccess: boolean) => void,
+    onNetworkFailure: () => void = ServerConfig.NETWORK_ERROR_MESSAGE,
+    retry: number = ServerConfig.CONNECTION_RETRY): void => {
     if (retry === 0) {
         onNetworkFailure()
         return
     }
-    callAPI().then((isSuccess:boolean)=>{
+    callAPI().then((isSuccess: boolean) => {
         onNetworkOK(isSuccess)
-    }).catch(()=>{
+    }).catch(() => {
         sendRequestWithRetry(callAPI, onNetworkOK, onNetworkFailure, retry - 1)
     })
 }

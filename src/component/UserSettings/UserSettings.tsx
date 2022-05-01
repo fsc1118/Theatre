@@ -1,8 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.css'
-import {Row, Col, Container, Figure, Button, Form} from "react-bootstrap"
+import { Row, Col, Container, Button, Form } from "react-bootstrap"
 import "./UserSettings.css"
+import { UpdateAPI } from "../../API/Update"
+import { sendRequestWithRetry } from "../../Util/Http_Utilities"
 import React, { useState, useEffect } from "react"
-import {getUsernameFromCookie} from "../../Util/Cookie_Utilities"
+import AppConfig from "../../config/global"
+import { getUsernameFromCookie, setCookie } from "../../Util/Cookie_Utilities"
 const profile = require("../../image/profile.png")
 export let UserSettings = (props: any) => {
     const LOADING = {
@@ -14,34 +17,39 @@ export let UserSettings = (props: any) => {
     }
     const [userInfo, setUserInfo] = useState(LOADING)
     const [edit, setEdit] = useState(false)
+    useEffect(() => {
+        if (getUsernameFromCookie() === null) {
+            return
+        }
+        const url = AppConfig.SERVER_IP + `api/user/find/${getUsernameFromCookie()}`
+        fetch(url).then(
+            (response) => {
+                return response.json()
+            }
+        ).then((data) => {
+            setUserInfo(data)
+        }).catch(() => {
+            window.location.replace("index.html")
+        })
+    }, [])
     if (getUsernameFromCookie() === null) {
-        setTimeout(()=>{
+        setTimeout(() => {
             window.location.replace("index.html")
         }, 2000)
         return <Container>
             <h2>You haven't logged in. Redirect you back...</h2>
         </Container>
     }
-    setTimeout(()=>{
-        setUserInfo({
-            name: "Shicheng Fang",
-            phone: "765-418-5890",
-            zip: "47906",
-            email: "fang282@purdue.edu",
-            city: "Hong Kong"
-        })
-    }, 100)
-
     if (userInfo === LOADING) {
         return <div>Loading...</div>
     }
 
     if (edit) {
-        const emailRef:React.RefObject<any> = React.createRef()
-        const zipRef:React.RefObject<any> = React.createRef()
-        const cityRef:React.RefObject<any> = React.createRef()
-        const phoneRef:React.RefObject<any> = React.createRef()
-        let onSubmit = (event: any)=>{
+        const emailRef: React.RefObject<any> = React.createRef()
+        const zipRef: React.RefObject<any> = React.createRef()
+        const cityRef: React.RefObject<any> = React.createRef()
+        const phoneRef: React.RefObject<any> = React.createRef()
+        let onSubmit = (event: any) => {
             event.preventDefault()
             const email = emailRef.current.value
             const zip = zipRef.current.value
@@ -50,16 +58,18 @@ export let UserSettings = (props: any) => {
             if (email === "" || zip === "" || city === "" || phone === "") {
                 alert("Some fields are unfilled")
             } else {
-                //fetch
-                window.location.reload()
+                sendRequestWithRetry(() => {
+                    return UpdateAPI(getUsernameFromCookie()!, email, city, phone, zip)
+                }, () => { window.location.reload() })
+
             }
         }
         return (
-           <div id={"editForm"}>
+            <div id={"editForm"}>
                 <Form className="justify-content-md-center" onSubmit={onSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" ref={emailRef}/>
+                        <Form.Control type="email" ref={emailRef} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>City</Form.Label>
@@ -82,10 +92,10 @@ export let UserSettings = (props: any) => {
         )
     }
     return (
-        <Container style={{marginTop: "1em"}}>
+        <Container style={{ marginTop: "1em" }}>
             <Row >
-                <Col xs={12} md={4} sm = {12} lg={4}>
-                    <img className = "profileImg" src={profile}></img>
+                <Col xs={12} md={4} sm={12} lg={4}>
+                    <img className="profileImg" src={profile}></img>
                 </Col>
                 <Col xs={12} md={6} lg={6} sm={12}>
                     <Row className={"profileName"}><Col>{userInfo.name}</Col></Row>
@@ -107,7 +117,7 @@ export let UserSettings = (props: any) => {
                     </Row>
                 </Col>
                 <Col lg={2}>
-                    <Button id = "edit" variant={"success"} onClick={()=>{setEdit(true)}}>Edit</Button>
+                    <Button id="edit" variant={"success"} onClick={() => { setEdit(true) }}>Edit</Button>
                 </Col>
             </Row>
         </Container>

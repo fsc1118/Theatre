@@ -24,3 +24,10 @@
 #root > div > div.ShowingMovies.container > div.MuiBox-root.css-i9gxme > div > div > a > div > p:nth-child(3) {
     color: green;
 }
+
+.filter {
+    margin: 10px !important;
+}
+#search {
+    background-color: #198754;
+}
