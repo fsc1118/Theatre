@@ -5,7 +5,7 @@ import "./MovieMainPage.css"
 import React, { useState, useEffect, useRef, Component } from 'react'
 
 export let MovieMainPage = (props: any) => {
-     const mountedRef = useRef(true)
+    const mountedRef = useRef(true)
     const name = 'movies'
     interface Movie {
              type: string,
@@ -49,9 +49,9 @@ export let MovieMainPage = (props: any) => {
 
 
     useEffect(() => {
-                getURL(name)
-                return () => { mountedRef.current = false }
-         })
+        getURL(name)
+        return () => { mountedRef.current = false }
+    }, [])
 // <img src={item.image_url} width="250" height="350"/>
 /*
 <Link to = {`/buyTicket/1`}>

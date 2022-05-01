@@ -1,0 +1,12 @@
+.PurchaseComplete {
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#root > div > div.PurchaseComplete.container > button {
+    background-color: #198754;
+    border: none;
+}
