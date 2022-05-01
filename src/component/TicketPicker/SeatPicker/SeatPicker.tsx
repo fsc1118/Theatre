@@ -106,7 +106,7 @@ export let SeatPicker = (props: any) => {
                                                             (e: any) => handleAddSeat(seats, e): undefined}
                                             className={"SeatPicker-Box"}
                                             style={ {
-                                                backgroundColor: !availableSeats.includes(seats)? "#8FBC8F":
+                                                backgroundColor: !availableSeats.includes(seats)? "#a6a6a6":
                                                                  selectedSeat === seats? "green": undefined,
                                                 color: (!availableSeats.includes(seats) ||
                                                             selectedSeat === seats)? "white": undefined,

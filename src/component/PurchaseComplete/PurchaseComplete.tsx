@@ -3,6 +3,7 @@ import { Container, Button } from "react-bootstrap";
 import React, { useState, useEffect} from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
+
 import './PurchaseComplete.css'
 
 export let PurchaseComplete = (props: any) => {
