@@ -69,7 +69,6 @@ export let ShowingMovies = (props: any) => {
         e.preventDefault()
         e.target.reset()
         let allMovies = [...movie]
-        e.target.reset()
         if (title !== "") {
             allMovies = allMovies.filter((movie: Movie)=>{
                 return movie.movie_name.toUpperCase() === title.toUpperCase()
