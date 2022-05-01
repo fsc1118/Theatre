@@ -3,6 +3,8 @@ import { Container, Button } from "react-bootstrap";
 import React, { useState, useEffect} from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
+import './PurchaseComplete.css'
+
 export let PurchaseComplete = (props: any) => {
     type PurchaseInfo = {
         movie_name?: string,
@@ -26,14 +28,14 @@ export let PurchaseComplete = (props: any) => {
     return (
         <>
         { purchaseInfo != {} ?
-        <Container>
+        <Container className = "PurchaseComplete">
             <br></br>
             <br></br>
             <h1 className="text-center">Order Complete. Your Ticket Has Been Purchased!</h1>
             <br></br>
             <h3 className="text-center">Movie: {purchaseInfo.movie_name}</h3>
             <h3 className="text-center">Total Paid: {purchaseInfo.total_paid}</h3>
-            <Button 
+            <Button className="PurchaseComplete-btn"
                 onClick={(e: any) => goBackHome()}>
                 Home
             </Button>
