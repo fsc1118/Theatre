@@ -7,11 +7,11 @@ import { TicketPicker } from './component/TicketPicker/TicketPicker'
 import { ReviewOrder } from './component/ReviewOrder/ReviewOrder'
 import { UserSettings } from './component/UserSettings/UserSettings'
 import { MovieMainPage } from './component/MovieMainPage/MovieMainPage'
-import { FindMovie } from './component/FindMovie/FindMovie'
 import { ShowingMovies } from './component/ShowingMoviesFilterPage/ShowingMovies'
 import { AllMovies } from './component/AllMovies/AllMovies'
 import { PurchaseComplete } from './component/PurchaseComplete/PurchaseComplete'
 import { PastPurchases } from './component/PastPurchases/PastPurchases'
+import { TopMovies } from './component/TopMovies/TopMovies'
 
 import { getUsernameFromCookie } from "./Util/Cookie_Utilities";
 
@@ -39,7 +39,7 @@ export let App = () => {
                     <Route path='/index.html' element = {<MovieMainPage />} />
                     <Route path='/user' element={<UserSettings/>}/>
                     <Route path='/past_purchases' element={<PastPurchases />} />
-                    <Route path='/findMovie' element = {<FindMovie />} />
+                    <Route path='/topMovies' element = {<TopMovies />} />
                     <Route path='/buyTicket/:movieId' element={isLogin? <TicketPicker /> : <Navigate to="/" />} />
                     <Route path='/reviewOrder' element={isLogin? <ReviewOrder /> : <Navigate to="/" />} />
                     <Route path='/movies/all' element={<AllMovies />} />

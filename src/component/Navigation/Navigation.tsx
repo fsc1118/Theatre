@@ -33,7 +33,7 @@ export let Navigation = (props: any) => {
                 <Nav className="me-auto">
                     <Link to="/">Home</Link>
                     <Link to="/movies/all">All Movies</Link>
-                    <Link to="/findMovie">Find Movies</Link>
+                    <Link to="/topMovies">Top Movies</Link>
                     <Link to="/movies/showing">Showing Movies</Link>
                     {isLogin ? <Link to="/user">My Settings</Link> : undefined}
                     {isLogin ? <Link to="/past_purchases">My Past Purchases</Link> : undefined}
