@@ -12,12 +12,12 @@ export let Navigation = (props: any) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        let timer = setInterval(() => {
+//         let timer = setInterval(() => {
             setIsLogin(getUsernameFromCookie() !== null)
-        }, 500)
-        return () => {
-            clearInterval(timer)
-        }
+//         }, 500)
+//         return () => {
+//             clearInterval(timer)
+//         }
     })
 
     const handleLogout = () => {
