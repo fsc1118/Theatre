@@ -109,7 +109,7 @@ export let ReviewOrder = (props: any) => {
         <Row className="justify-content-md-center">
             <Col xs md="4">
                 <h5 style={{display: "inline"}}>SEAT: </h5>
-                <p id="reviewSeats" style={{display: "inline"}}>{rowLetters[Math.floor(ticketInfo.seat_id!/6)]}{(ticketInfo.seat_id! % 5)!=0?ticketInfo.seat_id!%5:5}</p>
+                <p id="reviewSeats" style={{display: "inline"}}>{rowLetters[Math.floor((ticketInfo.seat_id!-1)/5)]}{(ticketInfo.seat_id! % 5)!=0?ticketInfo.seat_id!%5:5}</p>
             </Col>
             <Col xs md="3">
                 <h5 style={{display: "inline"}}>RATING: </h5>

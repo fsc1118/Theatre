@@ -150,7 +150,7 @@ export let PastPurchases = (props: any) => {
                             <p><b>Purchased on:</b> {new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' }).format(new Date(item.purchase_datetime))}</p>
                             <p><b>Showing on:</b> {new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' }).format(new Date(item.show_datetime))}</p>
                             <p><b>Room:</b> {item.room_id}</p>
-                            <p><b>Seat number:</b> {rowLetters[Math.floor(item.seat_num/6)]}{(item.seat_num%5)!=0?item.seat_num%5:5}</p>
+                            <p><b>Seat number:</b> {rowLetters[Math.floor((item.seat_num-1)/5)]}{(item.seat_num%5)!=0?item.seat_num%5:5}</p>
                             <p><b>Ticket price:</b> {item.ticket_price}</p>
                         </Item>
                     </Grid>
