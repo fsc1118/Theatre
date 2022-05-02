@@ -10,14 +10,11 @@ export let MovieMainPage = (props: any) => {
     interface Movie {
              type: string,
              ratings: string,
-             room_id: number;
              movie_id: number,
              movie_name: string,
-             production_date: string,
              movie_summary: string,
              image_url: string,
-             movie_length_in_minutes: number,
-             show_datetime: string
+             movie_length_in_minutes: number
     }
     const [ movies, setMovies ] = useState<Movie []>([])
     const top15 = [ {index: 1, number: "1"},
@@ -63,7 +60,7 @@ export let MovieMainPage = (props: any) => {
         <h1>Trending Movie</h1>
         <div className="scrollable">
                          {movies.map((item, index) => (
-                         <Link to = {`/buyTicket/${index+1}`} key = {index}>
+                         <Link to = {`/buyTicket/${item.movie_id}`} key = {index}>
                                      <img src={item.image_url} width="250" height="350"/>
                           </Link>
 

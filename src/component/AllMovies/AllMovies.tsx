@@ -18,6 +18,7 @@ import './AllMovies.css'
 
 export let AllMovies = (props: any) => {
     interface FilteredMovies {
+        movie_id: number,
         type: string,
         ratings: string,
         movie_name: string,
