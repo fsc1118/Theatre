@@ -63,15 +63,13 @@ export let MovieMainPage = (props: any) => {
         <h1>Trending Movie</h1>
         <div className="scrollable">
                          {movies.map((item, index) => (
-                         <Link to = {`/buyTicket/${index+1}`}>
+                         <Link to = {`/buyTicket/${index+1}`} key = {index}>
                                      <img src={item.image_url} width="250" height="350"/>
                           </Link>
 
                          ))}
 
         </div>
-
-
         </Container>
     )
 }

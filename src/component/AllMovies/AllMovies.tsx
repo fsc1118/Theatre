@@ -147,15 +147,6 @@ export let AllMovies = (props: any) => {
                            </Grid> : <NoResults />
                        }
                        </Box>
-
-
-
-
-
-
-
-
-
         </Container>
     )
 }
