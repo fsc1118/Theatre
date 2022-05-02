@@ -5,8 +5,12 @@ import { UpdateAPI } from "../../API/Update"
 import { sendRequestWithRetry } from "../../Util/Http_Utilities"
 import React, { useState, useEffect } from "react"
 import AppConfig from "../../config/global"
-import { getUsernameFromCookie, setCookie } from "../../Util/Cookie_Utilities"
+import { getUsernameFromCookie, setCookie, eraseCookie } from "../../Util/Cookie_Utilities"
+import { useNavigate } from "react-router-dom"
+import axios from 'axios'
+
 const profile = require("../../image/profile.png")
+
 export let UserSettings = (props: any) => {
     const LOADING = {
         name: "Loading",
@@ -16,7 +20,24 @@ export let UserSettings = (props: any) => {
         phone: "Loading",
     }
     const [userInfo, setUserInfo] = useState(LOADING)
+    const [userId, setUserId] = useState(-1)
+
+    const getUserId = async(username: any) => {
+        const userId_request = `/api/user/${username}`
+        try {
+            const response = await fetch(userId_request)
+            const user_id_dat = await response.json()
+            setUserId(user_id_dat)
+        } catch (error) {
+            console.log("Error: ")
+            console.log(error)
+        }
+    }
+
+    getUserId(getUsernameFromCookie())
     const [edit, setEdit] = useState(false)
+    const navigate = useNavigate()
+
     useEffect(() => {
         if (getUsernameFromCookie() === null) {
             return
@@ -32,6 +53,7 @@ export let UserSettings = (props: any) => {
             window.location.replace("index.html")
         })
     }, [])
+
     if (getUsernameFromCookie() === null) {
         setTimeout(() => {
             window.location.replace("index.html")
@@ -40,8 +62,24 @@ export let UserSettings = (props: any) => {
             <h2>You haven't logged in. Redirect you back...</h2>
         </Container>
     }
+
     if (userInfo === LOADING) {
         return <div>Loading...</div>
+    }
+
+
+
+    function handleDelete(e: any) {
+
+        const uri = `/api/user/${userId}`
+
+        axios.delete(uri)
+        .then(function (response: any) {
+            console.log(response)
+            eraseCookie("username")
+            navigate('/')
+        })
+        .catch(err => console.log(err))
     }
 
     if (edit) {
@@ -64,6 +102,7 @@ export let UserSettings = (props: any) => {
 
             }
         }
+
         return (
             <div id={"editForm"}>
                 <Form className="justify-content-md-center" onSubmit={onSubmit}>
@@ -85,15 +124,17 @@ export let UserSettings = (props: any) => {
                     </Form.Group>
                     <Row>
                         <Button variant={"success"} type={"submit"}>Save</Button>
+                        <Button variant={"success"} onClick = {() => navigate('/')}>Go Back</Button>
                     </Row>
                 </Form>
 
             </div>
         )
     }
+
     return (
-        <Container style={{ marginTop: "1em" }}>
-            <Row >
+        <Container className = "UserSettings-Container" style={{ marginTop: "1em" }}>
+            <Row>
                 <Col xs={12} md={4} sm={12} lg={4}>
                     <img className="profileImg" src={profile}></img>
                 </Col>
@@ -118,6 +159,7 @@ export let UserSettings = (props: any) => {
                 </Col>
                 <Col lg={2}>
                     <Button id="edit" variant={"success"} onClick={() => { setEdit(true) }}>Edit</Button>
+                    <Button id="delete" variant={"success"} onClick={(e: any) => handleDelete(e)}>Delete Account</Button>
                 </Col>
             </Row>
         </Container>
