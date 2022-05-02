@@ -1,3 +1,10 @@
+.UserSettings-Container {
+    height: 62vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .profileName {
     font-size: xxx-large;
     margin-bottom: 1em;
@@ -10,15 +17,29 @@
 }
 #edit {
     height: 50px;
-    width: 100px;
+    width: 150px;
+    margin: 10px 10px;
 }
 
 #editForm {
     margin-top: 3em;
     margin-left: auto;
     margin-right: auto;
-    width: 550px
+    width: 550px;
+    height: 58vh;
 }
+
+#editForm > form > div.row > button {
+    width: 96%;
+    margin: 10px 10px;
+}
+
+#delete {
+    height: 50px;
+    width: 150px;
+    margin: 10px 10px;
+}
+
 @media (max-width: 576px) {
     .profileImg {
         display: block;
